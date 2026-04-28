@@ -14,20 +14,26 @@
     header {
       background: #0d6efd;
       color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .search-box {
-      text-align: center;
+    header h2 {
+      margin: 0;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
       margin: 20px;
+      flex-wrap: wrap;
     }
 
-    input {
-      padding: 12px;
-      width: 280px;
+    input, select {
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
@@ -53,25 +59,42 @@
       margin: 10px 0;
     }
 
-    .trend-up {
-      color: green;
-    }
+    .trend-up { color: green; }
+    .trend-down { color: red; }
 
-    .trend-down {
-      color: red;
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
+      background: #eee;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-<header>Jaipur Property Insights</header>
+<header>
+  <h2>Jaipur Property Insights</h2>
+  <div>Market Trends</div>
+</header>
 
-<div class="search-box">
+<div class="filters">
   <input type="text" id="search" placeholder="Search area...">
+  
+  <select id="budget">
+    <option value="">All Budget</option>
+    <option value="4000">Below ₹4000</option>
+    <option value="5000">₹4000 - ₹5000</option>
+    <option value="6000">Above ₹5000</option>
+  </select>
 </div>
 
 <div class="container" id="results"></div>
+
+<footer>
+  © 2026 Jaipur Property Insights | Data is indicative
+</footer>
 
 <script>
 const data = [
@@ -84,6 +107,23 @@ const data = [
   {area:"Bani Park", price:5500, trend:"up"},
   {area:"Sitapura", price:3800, trend:"down"}
 ];
+
+function filterData() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const budget = document.getElementById("budget").value;
+
+  let filtered = data.filter(d => d.area.toLowerCase().includes(search));
+
+  if (budget === "4000") {
+    filtered = filtered.filter(d => d.price < 4000);
+  } else if (budget === "5000") {
+    filtered = filtered.filter(d => d.price >= 4000 && d.price <= 5000);
+  } else if (budget === "6000") {
+    filtered = filtered.filter(d => d.price > 5000);
+  }
+
+  showData(filtered);
+}
 
 function showData(list){
   let output = "";
@@ -101,11 +141,8 @@ function showData(list){
   document.getElementById("results").innerHTML = output;
 }
 
-document.getElementById("search").addEventListener("input", function(){
-  const value = this.value.toLowerCase();
-  const filtered = data.filter(d => d.area.toLowerCase().includes(value));
-  showData(filtered);
-});
+document.getElementById("search").addEventListener("input", filterData);
+document.getElementById("budget").addEventListener("change", filterData);
 
 showData(data);
 </script>
