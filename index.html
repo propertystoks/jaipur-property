@@ -1,3 +1,114 @@
 <!DOCTYPE html>
-<!-- saved from url=(0817)data:text/html,<!DOCTYPE html><html><head><title>Jaipur Property Insights</title></head><body style="font-family:Arial;text-align:center;"><h1>Jaipur Property Insights</h1><input type="text" id="search" placeholder="Search area..." style="padding:10px;width:250px;"><div id="results"></div><script>const data=[{area:"Vaishali Nagar",price:5200},{area:"Mansarovar",price:4800},{area:"Jagatpura",price:4200}];function showData(list){let output="";list.forEach(item=>{output+=`<p>${item.area} - %E2%82%B9${item.price}/sq ft</p>`;});document.getElementById("results").innerHTML=output;}document.getElementById("search").addEventListener("input",function(){const value=this.value.toLowerCase();const filtered=data.filter(d=>d.area.toLowerCase().includes(value));showData(filtered);});showData(data);</script></body></html> -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Jaipur Property Insights</title></head><body style="font-family:Arial;text-align:center;"><h1>Jaipur Property Insights</h1><input type="text" id="search" placeholder="Search area..." style="padding:10px;width:250px;"><div id="results"><p>Vaishali Nagar - ₹5200/sq ft</p><p>Mansarovar - ₹4800/sq ft</p><p>Jagatpura - ₹4200/sq ft</p></div><script>const data=[{area:"Vaishali Nagar",price:5200},{area:"Mansarovar",price:4800},{area:"Jagatpura",price:4200}];function showData(list){let output="";list.forEach(item=>{output+=`<p>${item.area} - ₹${item.price}/sq ft</p>`;});document.getElementById("results").innerHTML=output;}document.getElementById("search").addEventListener("input",function(){const value=this.value.toLowerCase();const filtered=data.filter(d=>d.area.toLowerCase().includes(value));showData(filtered);});showData(data);</script></body></html>
+<html>
+<head>
+  <title>Jaipur Property Insights</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    header {
+      background: #0d6efd;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .search-box {
+      text-align: center;
+      margin: 20px;
+    }
+
+    input {
+      padding: 12px;
+      width: 280px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      width: 260px;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .trend-up {
+      color: green;
+    }
+
+    .trend-down {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Jaipur Property Insights</header>
+
+<div class="search-box">
+  <input type="text" id="search" placeholder="Search area...">
+</div>
+
+<div class="container" id="results"></div>
+
+<script>
+const data = [
+  {area:"Vaishali Nagar", price:5200, trend:"up"},
+  {area:"Mansarovar", price:4800, trend:"up"},
+  {area:"Jagatpura", price:4200, trend:"down"},
+  {area:"Malviya Nagar", price:6000, trend:"up"},
+  {area:"Tonk Road", price:4500, trend:"down"},
+  {area:"Ajmer Road", price:4000, trend:"up"},
+  {area:"Bani Park", price:5500, trend:"up"},
+  {area:"Sitapura", price:3800, trend:"down"}
+];
+
+function showData(list){
+  let output = "";
+  list.forEach(item => {
+    output += `
+      <div class="card">
+        <h3>${item.area}</h3>
+        <div class="price">₹${item.price}/sq ft</div>
+        <div class="${item.trend === 'up' ? 'trend-up' : 'trend-down'}">
+          ${item.trend === 'up' ? '⬆ Increasing' : '⬇ Decreasing'}
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById("results").innerHTML = output;
+}
+
+document.getElementById("search").addEventListener("input", function(){
+  const value = this.value.toLowerCase();
+  const filtered = data.filter(d => d.area.toLowerCase().includes(value));
+  showData(filtered);
+});
+
+showData(data);
+</script>
+
+</body>
+</html>
