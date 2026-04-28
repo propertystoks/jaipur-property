@@ -6,57 +6,62 @@
 
   <style>
     body {
-      font-family: Arial;
       margin: 0;
-      background: #f4f6f8;
+      font-family: Arial;
+      background: #f1f3f6;
     }
 
     header {
-      background: #0d6efd;
-      color: white;
+      background: white;
       padding: 15px 20px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     header h2 {
       margin: 0;
+      color: #0d6efd;
+    }
+
+    .hero {
+      background: #0d6efd;
+      color: white;
+      padding: 30px;
+      text-align: center;
     }
 
     .filters {
+      margin-top: -20px;
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin: 20px;
-      flex-wrap: wrap;
     }
 
     input, select {
-      padding: 10px;
+      padding: 12px;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: none;
+      width: 200px;
     }
 
     .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 20px;
     }
 
     .card {
       background: white;
-      width: 260px;
-      margin: 10px;
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .price {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
-      margin: 10px 0;
     }
 
     .trend-up { color: green; }
@@ -65,9 +70,7 @@
     footer {
       text-align: center;
       padding: 20px;
-      margin-top: 20px;
       background: #eee;
-      font-size: 14px;
     }
   </style>
 </head>
@@ -75,13 +78,16 @@
 <body>
 
 <header>
-  <h2>Jaipur Property Insights</h2>
-  <div>Market Trends</div>
+  <h2>Property Insights</h2>
 </header>
+
+<div class="hero">
+  <h1>Find Property Rates in Jaipur</h1>
+  <p>Area-wise latest trends & prices</p>
+</div>
 
 <div class="filters">
   <input type="text" id="search" placeholder="Search area...">
-  
   <select id="budget">
     <option value="">All Budget</option>
     <option value="4000">Below ₹4000</option>
@@ -92,9 +98,7 @@
 
 <div class="container" id="results"></div>
 
-<footer>
-  © 2026 Jaipur Property Insights | Data is indicative
-</footer>
+<footer>© 2026 Property Insights</footer>
 
 <script>
 const data = [
@@ -114,13 +118,9 @@ function filterData() {
 
   let filtered = data.filter(d => d.area.toLowerCase().includes(search));
 
-  if (budget === "4000") {
-    filtered = filtered.filter(d => d.price < 4000);
-  } else if (budget === "5000") {
-    filtered = filtered.filter(d => d.price >= 4000 && d.price <= 5000);
-  } else if (budget === "6000") {
-    filtered = filtered.filter(d => d.price > 5000);
-  }
+  if (budget === "4000") filtered = filtered.filter(d => d.price < 4000);
+  if (budget === "5000") filtered = filtered.filter(d => d.price >= 4000 && d.price <= 5000);
+  if (budget === "6000") filtered = filtered.filter(d => d.price > 5000);
 
   showData(filtered);
 }
