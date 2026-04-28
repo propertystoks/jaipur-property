@@ -101,15 +101,9 @@
 <footer>© 2026 Property Insights</footer>
 
 <script>
-const data = [
+let data = JSON.parse(localStorage.getItem("propertyData")) || [
   {area:"Vaishali Nagar", price:5200, trend:"up"},
-  {area:"Mansarovar", price:4800, trend:"up"},
-  {area:"Jagatpura", price:4200, trend:"down"},
-  {area:"Malviya Nagar", price:6000, trend:"up"},
-  {area:"Tonk Road", price:4500, trend:"down"},
-  {area:"Ajmer Road", price:4000, trend:"up"},
-  {area:"Bani Park", price:5500, trend:"up"},
-  {area:"Sitapura", price:3800, trend:"down"}
+  {area:"Mansarovar", price:4800, trend:"up"}
 ];
 
 function filterData() {
