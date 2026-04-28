@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { padding: 10px; margin: 5px; }
+  </style>
+</head>
+
+<body>
+
+<h2>Admin Panel - Add Property Data</h2>
+
+<input type="text" id="area" placeholder="Area Name">
+<input type="number" id="price" placeholder="Price per sq ft">
+
+<select id="trend">
+  <option value="up">Increasing</option>
+  <option value="down">Decreasing</option>
+</select>
+
+<button onclick="addData()">Add</button>
+
+<h3>Saved Data</h3>
+<div id="list"></div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("propertyData")) || [];
+
+function addData() {
+  const area = document.getElementById("area").value;
+  const price = document.getElementById("price").value;
+  const trend = document.getElementById("trend").value;
+
+  data.push({area, price, trend});
+  localStorage.setItem("propertyData", JSON.stringify(data));
+
+  showData();
+}
+
+function showData() {
+  let output = "";
+  data.forEach(d => {
+    output += `<p>${d.area} - ₹${d.price}</p>`;
+  });
+  document.getElementById("list").innerHTML = output;
+}
+
+showData();
+</script>
+
+</body>
+</html>
