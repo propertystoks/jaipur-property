@@ -34,17 +34,32 @@ async function addData() {
   const price = document.getElementById("price").value;
   const trend = document.getElementById("trend").value;
 
-  const newData = { area, price, trend };
+  if (!area || !price) {
+    alert("Please fill all fields");
+    return;
+  }
 
-  await fetch("https://property-backend-pfil.onrender.com/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(newData)
-  });
+  try {
+    const res = await fetch("https://property-backend-pfil.onrender.com/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        area: area,
+        price: Number(price),
+        trend: trend
+      })
+    });
 
-  alert("Data added successfully!");
+    const data = await res.json();
+    console.log(data);
+
+    alert("Data added successfully!");
+  } catch (error) {
+    console.error(error);
+    alert("Error connecting to backend");
+  }
 }
 </script>
 
