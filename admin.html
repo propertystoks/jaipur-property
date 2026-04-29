@@ -3,8 +3,14 @@
 <head>
   <title>Admin Panel</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    input, button { padding: 10px; margin: 5px; }
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -22,32 +28,24 @@
 
 <button onclick="addData()">Add</button>
 
-<h3>Saved Data</h3>
-<div id="list"></div>
-
 <script>
-let data = JSON.parse(localStorage.getItem("propertyData")) || [];
-
-function addData() {
+async function addData() {
   const area = document.getElementById("area").value;
   const price = document.getElementById("price").value;
   const trend = document.getElementById("trend").value;
 
-  data.push({area, price, trend});
-  localStorage.setItem("propertyData", JSON.stringify(data));
+  const newData = { area, price, trend };
 
-  showData();
-}
-
-function showData() {
-  let output = "";
-  data.forEach(d => {
-    output += `<p>${d.area} - ₹${d.price}</p>`;
+  await fetch("https://property-backend-pfil.onrender.com/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newData)
   });
-  document.getElementById("list").innerHTML = output;
-}
 
-showData();
+  alert("Data added successfully!");
+}
 </script>
 
 </body>
