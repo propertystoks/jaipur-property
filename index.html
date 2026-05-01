@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PropertyStoks - Jaipur</title>
+  <title>PropertyStoks</title>
 
   <style>
     body {
@@ -22,9 +22,14 @@
       padding: 20px;
     }
 
-    input {
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input, select {
       padding: 10px;
-      width: 250px;
       border-radius: 5px;
       border: 1px solid #ccc;
     }
@@ -58,10 +63,12 @@
       color: #27ae60;
     }
 
-    .trend {
-      margin-top: 5px;
-      font-size: 14px;
-      color: #888;
+    .trend-up {
+      color: green;
+    }
+
+    .trend-down {
+      color: red;
     }
   </style>
 </head>
@@ -74,8 +81,21 @@
 
 <div class="container">
 
-  <input type="text" id="search" placeholder="Search area...">
-  <button onclick="searchData()">Search</button>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search area">
+
+    <input type="number" id="minPrice" placeholder="Min Price">
+
+    <input type="number" id="maxPrice" placeholder="Max Price">
+
+    <select id="trend">
+      <option value="">All Trends</option>
+      <option value="up">Increasing</option>
+      <option value="down">Decreasing</option>
+    </select>
+
+    <button onclick="applyFilters()">Apply</button>
+  </div>
 
   <div class="cards" id="results"></div>
 
@@ -85,27 +105,25 @@
 let allData = [];
 
 async function loadData() {
-  try {
-    const res = await fetch("https://property-backend-pfil.onrender.com/data");
-    allData = await res.json();
-    showData(allData);
-  } catch (error) {
-    document.getElementById("results").innerHTML = "Error loading data";
-  }
+  const res = await fetch("https://property-backend-pfil.onrender.com/data");
+  allData = await res.json();
+  showData(allData);
 }
 
 function showData(data) {
   let output = "";
 
   if (data.length === 0) {
-    output = "No data available";
+    output = "No results found";
   } else {
     data.forEach(item => {
       output += `
         <div class="card">
           <h3>${item.area}</h3>
           <div class="price">₹${item.price}/sq ft</div>
-          <div class="trend">${item.trend}</div>
+          <div class="${item.trend === 'up' ? 'trend-up' : 'trend-down'}">
+            ${item.trend === 'up' ? 'Increasing 📈' : 'Decreasing 📉'}
+          </div>
         </div>
       `;
     });
@@ -114,12 +132,20 @@ function showData(data) {
   document.getElementById("results").innerHTML = output;
 }
 
-function searchData() {
-  const value = document.getElementById("search").value.toLowerCase();
+function applyFilters() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const min = document.getElementById("minPrice").value;
+  const max = document.getElementById("maxPrice").value;
+  const trend = document.getElementById("trend").value;
 
-  const filtered = allData.filter(item =>
-    item.area.toLowerCase().includes(value)
-  );
+  let filtered = allData.filter(item => {
+    return (
+      item.area.toLowerCase().includes(search) &&
+      (!min || item.price >= min) &&
+      (!max || item.price <= max) &&
+      (!trend || item.trend === trend)
+    );
+  });
 
   showData(filtered);
 }
