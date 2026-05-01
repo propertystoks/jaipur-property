@@ -40,10 +40,12 @@
     }
 
     button {
-      padding:10px;
+      padding:8px 12px;
       background:#0a3d62;
       color:white;
       border:none;
+      cursor:pointer;
+      margin-top:5px;
     }
 
     .cards {
@@ -132,7 +134,7 @@ function update(data) {
   loadMap(data);
 }
 
-// SHOW CARDS
+// SHOW CARDS (WITH MONETIZATION)
 function show(data) {
   let html = "";
   data.forEach(i => {
@@ -141,6 +143,10 @@ function show(data) {
         <h3>${i.area}</h3>
         <div>₹${i.price}</div>
         <div>${i.trend}</div>
+
+        <button onclick="unlock('${i.area}')">
+          🔒 Unlock Full Report (₹99)
+        </button>
       </div>
     `;
   });
@@ -203,7 +209,6 @@ function getCoords(area) {
     "jagatpura": [26.8440, 75.8230],
     "malviya nagar": [26.8500, 75.8100]
   };
-
   return loc[area.toLowerCase()];
 }
 
@@ -222,6 +227,26 @@ function applyFilters() {
   );
 
   update(f);
+}
+
+// MONETIZATION (DEMO)
+function unlock(area) {
+  alert("Premium Report for " + area + "\n\nPay ₹99 to unlock");
+
+  // Demo success
+  alert("Payment Successful ✅");
+
+  showReport(area);
+}
+
+// PREMIUM REPORT
+function showReport(area) {
+  alert(
+    "📊 Premium Report: " + area +
+    "\n\n- Expected Growth: High 📈" +
+    "\n- Investment Score: 8/10" +
+    "\n- Best Time: Next 6 months"
+  );
 }
 
 // START
