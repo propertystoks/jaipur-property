@@ -2,64 +2,93 @@
 <html>
 <head>
   <title>Admin Panel</title>
+
   <style>
     body {
       font-family: Arial;
-      padding: 20px;
+      background: #f5f6fa;
+      text-align: center;
+      margin-top: 50px;
     }
-    input, select, button {
+
+    input, select {
       padding: 10px;
       margin: 5px;
+      width: 200px;
+    }
+
+    button {
+      padding: 10px;
+      background: #0a3d62;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      display: inline-block;
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<h2>Admin Panel - Add Property Data</h2>
+<div id="loginBox" class="box">
+  <h2>Admin Login</h2>
+  <input id="username" placeholder="Username"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
 
-<input type="text" id="area" placeholder="Area Name">
-<input type="number" id="price" placeholder="Price per sq ft">
+<div id="adminPanel" class="box" style="display:none;">
+  <h2>Add Property Data</h2>
 
-<select id="trend">
-  <option value="up">Increasing</option>
-  <option value="down">Decreasing</option>
-</select>
+  <input id="area" placeholder="Area"><br>
+  <input id="price" placeholder="Price"><br>
 
-<button onclick="addData()">Add</button>
+  <select id="trend">
+    <option value="up">Increasing</option>
+    <option value="down">Decreasing</option>
+  </select><br>
+
+  <button onclick="addData()">Add</button>
+</div>
 
 <script>
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  if (user === "admin" && pass === "admin123") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    alert("Wrong credentials");
+  }
+}
+
 async function addData() {
   const area = document.getElementById("area").value;
   const price = document.getElementById("price").value;
   const trend = document.getElementById("trend").value;
 
   if (!area || !price) {
-    alert("Please fill all fields");
+    alert("Fill all fields");
     return;
   }
 
-  try {
-    const res = await fetch("https://property-backend-pfil.onrender.com/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        area: area,
-        price: Number(price),
-        trend: trend
-      })
-    });
+  await fetch("https://property-backend-pfil.onrender.com/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ area, price, trend })
+  });
 
-    const data = await res.json();
-    console.log(data);
-
-    alert("Data added successfully!");
-  } catch (error) {
-    console.error(error);
-    alert("Error connecting to backend");
-  }
+  alert("Data Added ✅");
 }
 </script>
 
