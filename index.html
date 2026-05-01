@@ -2,143 +2,83 @@
 <html>
 <head>
   <title>Jaipur Property Insights</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     body {
-      margin: 0;
       font-family: Arial;
-      background: #f1f3f6;
+      padding: 20px;
     }
 
-    header {
-      background: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    h1 {
+      color: blue;
     }
 
-    header h2 {
-      margin: 0;
-      color: #0d6efd;
-    }
-
-    .hero {
-      background: #0d6efd;
-      color: white;
-      padding: 30px;
-      text-align: center;
-    }
-
-    .filters {
-      margin-top: -20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    input, select {
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
+    input {
+      padding: 10px;
       width: 200px;
+      margin-right: 10px;
     }
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      padding: 20px;
+    button {
+      padding: 10px;
     }
 
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .price {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .trend-up { color: green; }
-    .trend-down { color: red; }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #eee;
+    #results {
+      margin-top: 20px;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h2>Property Insights</h2>
-</header>
+<h1>Find Property Rates in Jaipur</h1>
 
-<div class="hero">
-  <h1>Find Property Rates in Jaipur</h1>
-  <p>Area-wise latest trends & prices</p>
-</div>
+<input type="text" id="search" placeholder="Enter area name">
+<button onclick="searchData()">Search</button>
 
-<div class="filters">
-  <input type="text" id="search" placeholder="Search area...">
-  <select id="budget">
-    <option value="">All Budget</option>
-    <option value="4000">Below ₹4000</option>
-    <option value="5000">₹4000 - ₹5000</option>
-    <option value="6000">Above ₹5000</option>
-  </select>
-</div>
-
-<div class="container" id="results"></div>
-
-<footer>© 2026 Property Insights</footer>
+<div id="results"></div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("propertyData")) || [
-  {area:"Vaishali Nagar", price:5200, trend:"up"},
-  {area:"Mansarovar", price:4800, trend:"up"}
-];
+let allData = [];
 
-function filterData() {
-  const search = document.getElementById("search").value.toLowerCase();
-  const budget = document.getElementById("budget").value;
+// 🔹 Load data from backend
+async function loadData() {
+  try {
+    const res = await fetch("https://property-backend-pfil.onrender.com/data");
+    allData = await res.json();
+    showData(allData);
+  } catch (error) {
+    document.getElementById("results").innerHTML = "Error loading data";
+  }
+}
 
-  let filtered = data.filter(d => d.area.toLowerCase().includes(search));
+// 🔹 Show data
+function showData(data) {
+  let output = "";
 
-  if (budget === "4000") filtered = filtered.filter(d => d.price < 4000);
-  if (budget === "5000") filtered = filtered.filter(d => d.price >= 4000 && d.price <= 5000);
-  if (budget === "6000") filtered = filtered.filter(d => d.price > 5000);
+  if (data.length === 0) {
+    output = "No data available";
+  } else {
+    data.forEach(item => {
+      output += `<p><b>${item.area}</b> - ₹${item.price}/sq ft (${item.trend})</p>`;
+    });
+  }
+
+  document.getElementById("results").innerHTML = output;
+}
+
+// 🔹 Search function
+function searchData() {
+  const searchValue = document.getElementById("search").value.toLowerCase();
+
+  const filtered = allData.filter(item =>
+    item.area.toLowerCase().includes(searchValue)
+  );
 
   showData(filtered);
 }
 
-function showData(list){
-  let output = "";
-  list.forEach(item => {
-    output += `
-      <div class="card">
-        <h3>${item.area}</h3>
-        <div class="price">₹${item.price}/sq ft</div>
-        <div class="${item.trend === 'up' ? 'trend-up' : 'trend-down'}">
-          ${item.trend === 'up' ? '⬆ Increasing' : '⬇ Decreasing'}
-        </div>
-      </div>
-    `;
-  });
-  document.getElementById("results").innerHTML = output;
-}
-
-document.getElementById("search").addEventListener("input", filterData);
-document.getElementById("budget").addEventListener("change", filterData);
-
-showData(data);
+// 🔹 Load on start
+loadData();
 </script>
 
 </body>
