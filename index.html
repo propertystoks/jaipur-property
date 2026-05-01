@@ -3,6 +3,8 @@
 <head>
   <title>PropertyStoks</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       font-family: Arial;
@@ -63,13 +65,8 @@
       color: #27ae60;
     }
 
-    .trend-up {
-      color: green;
-    }
-
-    .trend-down {
-      color: red;
-    }
+    .trend-up { color: green; }
+    .trend-down { color: red; }
 
     .insights {
       display: flex;
@@ -83,6 +80,13 @@
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    canvas {
+      margin-top: 20px;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -116,9 +120,7 @@
   <!-- FILTERS -->
   <div class="filters">
     <input type="text" id="search" placeholder="Search area">
-
     <input type="number" id="minPrice" placeholder="Min Price">
-
     <input type="number" id="maxPrice" placeholder="Max Price">
 
     <select id="trend">
@@ -130,6 +132,9 @@
     <button onclick="applyFilters()">Apply</button>
   </div>
 
+  <!-- CHART -->
+  <canvas id="priceChart"></canvas>
+
   <!-- RESULTS -->
   <div class="cards" id="results"></div>
 
@@ -137,19 +142,16 @@
 
 <script>
 let allData = [];
+let chartInstance = null;
 
-// LOAD DATA FROM BACKEND
+// LOAD DATA
 async function loadData() {
-  try {
-    const res = await fetch("https://property-backend-pfil.onrender.com/data");
-    allData = await res.json();
+  const res = await fetch("https://property-backend-pfil.onrender.com/data");
+  allData = await res.json();
 
-    showData(allData);
-    calculateInsights(allData);
-
-  } catch (error) {
-    document.getElementById("results").innerHTML = "Error loading data";
-  }
+  showData(allData);
+  calculateInsights(allData);
+  drawChart(allData);
 }
 
 // SHOW DATA
@@ -175,7 +177,7 @@ function showData(data) {
   document.getElementById("results").innerHTML = output;
 }
 
-// FILTERS
+// FILTER
 function applyFilters() {
   const search = document.getElementById("search").value.toLowerCase();
   const min = document.getElementById("minPrice").value;
@@ -193,32 +195,52 @@ function applyFilters() {
 
   showData(filtered);
   calculateInsights(filtered);
+  drawChart(filtered);
 }
 
-// INSIGHTS CALCULATION
+// INSIGHTS
 function calculateInsights(data) {
   if (data.length === 0) return;
 
-  let total = 0;
-  let up = 0;
-  let down = 0;
+  let total = 0, up = 0, down = 0;
 
   data.forEach(item => {
     total += item.price;
-    if (item.trend === "up") up++;
-    else down++;
+    item.trend === "up" ? up++ : down++;
   });
 
   const avg = Math.round(total / data.length);
 
   document.getElementById("avgPrice").innerText = "₹" + avg;
   document.getElementById("totalAreas").innerText = data.length;
-
   document.getElementById("marketTrend").innerText =
     up > down ? "Growing 📈" : "Falling 📉";
 }
 
-// LOAD ON START
+// CHART
+function drawChart(data) {
+  const labels = data.map(i => i.area);
+  const prices = data.map(i => i.price);
+
+  if (chartInstance) {
+    chartInstance.destroy(); // FIX overlap
+  }
+
+  const ctx = document.getElementById("priceChart");
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Price per sq ft',
+        data: prices
+      }]
+    }
+  });
+}
+
+// START
 loadData();
 </script>
 
