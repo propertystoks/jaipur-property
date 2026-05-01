@@ -1,51 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel</title>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f6fa;
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    input, select {
-      padding: 10px;
-      margin: 5px;
-      width: 200px;
-    }
-
-    button {
-      padding: 10px;
-      background: #0a3d62;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .box {
-      background: white;
-      padding: 20px;
-      display: inline-block;
-      border-radius: 10px;
-    }
-  </style>
+  <title>Admin</title>
 </head>
-
 <body>
 
-<div id="loginBox" class="box">
-  <h2>Admin Login</h2>
-  <input id="username" placeholder="Username"><br>
-  <input id="password" type="password" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
-</div>
+<h2>Login</h2>
+<input id="username" placeholder="Username"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<button onclick="login()">Login</button>
 
-<div id="adminPanel" class="box" style="display:none;">
-  <h2>Add Property Data</h2>
-
+<div id="panel" style="display:none;">
+  <h2>Add Data</h2>
   <input id="area" placeholder="Area"><br>
   <input id="price" placeholder="Price"><br>
 
@@ -58,37 +24,44 @@
 </div>
 
 <script>
-function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
+let token = "";
 
-  if (user === "admin" && pass === "admin123") {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
+async function login() {
+  const res = await fetch("https://property-backend-pfil.onrender.com/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.token) {
+    token = data.token;
+    document.getElementById("panel").style.display = "block";
+    alert("Login success");
   } else {
-    alert("Wrong credentials");
+    alert("Login failed");
   }
 }
 
 async function addData() {
-  const area = document.getElementById("area").value;
-  const price = document.getElementById("price").value;
-  const trend = document.getElementById("trend").value;
-
-  if (!area || !price) {
-    alert("Fill all fields");
-    return;
-  }
-
   await fetch("https://property-backend-pfil.onrender.com/add", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": token
     },
-    body: JSON.stringify({ area, price, trend })
+    body: JSON.stringify({
+      area: document.getElementById("area").value,
+      price: document.getElementById("price").value,
+      trend: document.getElementById("trend").value
+    })
   });
 
-  alert("Data Added ✅");
+  alert("Added");
 }
 </script>
 
