@@ -70,6 +70,20 @@
     .trend-down {
       color: red;
     }
+
+    .insights {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 
@@ -79,8 +93,27 @@
   PropertyStoks - Jaipur Property Rates
 </header>
 
+<!-- INSIGHTS -->
+<div class="insights">
+  <div class="box">
+    <b>Avg Price</b>
+    <div id="avgPrice">-</div>
+  </div>
+
+  <div class="box">
+    <b>Total Areas</b>
+    <div id="totalAreas">-</div>
+  </div>
+
+  <div class="box">
+    <b>Market Trend</b>
+    <div id="marketTrend">-</div>
+  </div>
+</div>
+
 <div class="container">
 
+  <!-- FILTERS -->
   <div class="filters">
     <input type="text" id="search" placeholder="Search area">
 
@@ -97,6 +130,7 @@
     <button onclick="applyFilters()">Apply</button>
   </div>
 
+  <!-- RESULTS -->
   <div class="cards" id="results"></div>
 
 </div>
@@ -104,12 +138,21 @@
 <script>
 let allData = [];
 
+// LOAD DATA FROM BACKEND
 async function loadData() {
-  const res = await fetch("https://property-backend-pfil.onrender.com/data");
-  allData = await res.json();
-  showData(allData);
+  try {
+    const res = await fetch("https://property-backend-pfil.onrender.com/data");
+    allData = await res.json();
+
+    showData(allData);
+    calculateInsights(allData);
+
+  } catch (error) {
+    document.getElementById("results").innerHTML = "Error loading data";
+  }
 }
 
+// SHOW DATA
 function showData(data) {
   let output = "";
 
@@ -132,6 +175,7 @@ function showData(data) {
   document.getElementById("results").innerHTML = output;
 }
 
+// FILTERS
 function applyFilters() {
   const search = document.getElementById("search").value.toLowerCase();
   const min = document.getElementById("minPrice").value;
@@ -148,8 +192,33 @@ function applyFilters() {
   });
 
   showData(filtered);
+  calculateInsights(filtered);
 }
 
+// INSIGHTS CALCULATION
+function calculateInsights(data) {
+  if (data.length === 0) return;
+
+  let total = 0;
+  let up = 0;
+  let down = 0;
+
+  data.forEach(item => {
+    total += item.price;
+    if (item.trend === "up") up++;
+    else down++;
+  });
+
+  const avg = Math.round(total / data.length);
+
+  document.getElementById("avgPrice").innerText = "₹" + avg;
+  document.getElementById("totalAreas").innerText = data.length;
+
+  document.getElementById("marketTrend").innerText =
+    up > down ? "Growing 📈" : "Falling 📉";
+}
+
+// LOAD ON START
 loadData();
 </script>
 
