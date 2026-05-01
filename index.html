@@ -1,46 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Jaipur Property Insights</title>
+  <title>PropertyStoks - Jaipur</title>
+
   <style>
     body {
       font-family: Arial;
-      padding: 20px;
+      background: #f5f6fa;
+      margin: 0;
     }
 
-    h1 {
-      color: blue;
+    header {
+      background: #0a3d62;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    .container {
+      padding: 20px;
     }
 
     input {
       padding: 10px;
-      width: 200px;
-      margin-right: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
-      padding: 10px;
+      padding: 10px 15px;
+      background: #0a3d62;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    #results {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
       margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #27ae60;
+    }
+
+    .trend {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #888;
     }
   </style>
 </head>
 
 <body>
 
-<h1>Find Property Rates in Jaipur</h1>
+<header>
+  PropertyStoks - Jaipur Property Rates
+</header>
 
-<input type="text" id="search" placeholder="Enter area name">
-<button onclick="searchData()">Search</button>
+<div class="container">
 
-<div id="results"></div>
+  <input type="text" id="search" placeholder="Search area...">
+  <button onclick="searchData()">Search</button>
+
+  <div class="cards" id="results"></div>
+
+</div>
 
 <script>
 let allData = [];
 
-// 🔹 Load data from backend
 async function loadData() {
   try {
     const res = await fetch("https://property-backend-pfil.onrender.com/data");
@@ -51,7 +94,6 @@ async function loadData() {
   }
 }
 
-// 🔹 Show data
 function showData(data) {
   let output = "";
 
@@ -59,25 +101,29 @@ function showData(data) {
     output = "No data available";
   } else {
     data.forEach(item => {
-      output += `<p><b>${item.area}</b> - ₹${item.price}/sq ft (${item.trend})</p>`;
+      output += `
+        <div class="card">
+          <h3>${item.area}</h3>
+          <div class="price">₹${item.price}/sq ft</div>
+          <div class="trend">${item.trend}</div>
+        </div>
+      `;
     });
   }
 
   document.getElementById("results").innerHTML = output;
 }
 
-// 🔹 Search function
 function searchData() {
-  const searchValue = document.getElementById("search").value.toLowerCase();
+  const value = document.getElementById("search").value.toLowerCase();
 
   const filtered = allData.filter(item =>
-    item.area.toLowerCase().includes(searchValue)
+    item.area.toLowerCase().includes(value)
   );
 
   showData(filtered);
 }
 
-// 🔹 Load on start
 loadData();
 </script>
 
