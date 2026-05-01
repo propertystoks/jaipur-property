@@ -1,30 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PropertyStoks</title>
-
+  <title>PropertyStoks Pro</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     body {
-      font-family: Arial;
-      background: #f5f6fa;
       margin: 0;
+      font-family: Arial;
+      display: flex;
     }
 
-    header {
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
       background: #0a3d62;
       color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-    }
-
-    .container {
+      height: 100vh;
       padding: 20px;
     }
 
+    .sidebar h2 {
+      margin-bottom: 20px;
+    }
+
+    .sidebar div {
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      background: #f5f6fa;
+      padding: 20px;
+    }
+
+    .top {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .insights {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      min-width: 150px;
+    }
+
     .filters {
+      margin-top: 20px;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -37,94 +68,66 @@
     }
 
     button {
-      padding: 10px 15px;
+      padding: 10px;
       background: #0a3d62;
       color: white;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
 
     .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
       margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
     }
 
     .card {
       background: white;
       padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .price {
-      font-size: 20px;
-      font-weight: bold;
-      color: #27ae60;
-    }
-
-    .trend-up { color: green; }
-    .trend-down { color: red; }
-
-    .insights {
-      display: flex;
-      gap: 20px;
-      padding: 20px;
-      flex-wrap: wrap;
-    }
-
-    .box {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 18px;
+      color: green;
     }
 
     canvas {
       margin-top: 20px;
       background: white;
-      padding: 10px;
       border-radius: 10px;
+      padding: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  PropertyStoks - Jaipur Property Rates
-</header>
-
-<!-- INSIGHTS -->
-<div class="insights">
-  <div class="box">
-    <b>Avg Price</b>
-    <div id="avgPrice">-</div>
-  </div>
-
-  <div class="box">
-    <b>Total Areas</b>
-    <div id="totalAreas">-</div>
-  </div>
-
-  <div class="box">
-    <b>Market Trend</b>
-    <div id="marketTrend">-</div>
-  </div>
+<div class="sidebar">
+  <h2>PropertyStoks</h2>
+  <div>Dashboard</div>
+  <div>Insights</div>
+  <div>Analytics</div>
 </div>
 
-<div class="container">
+<div class="main">
 
-  <!-- FILTERS -->
+  <div class="top">Jaipur Property Dashboard</div>
+
+  <div class="insights">
+    <div class="box">Avg Price: <div id="avgPrice"></div></div>
+    <div class="box">Total Areas: <div id="totalAreas"></div></div>
+    <div class="box">Trend: <div id="marketTrend"></div></div>
+  </div>
+
   <div class="filters">
-    <input type="text" id="search" placeholder="Search area">
-    <input type="number" id="minPrice" placeholder="Min Price">
-    <input type="number" id="maxPrice" placeholder="Max Price">
+    <input id="search" placeholder="Search area">
+    <input id="minPrice" placeholder="Min Price">
+    <input id="maxPrice" placeholder="Max Price">
 
     <select id="trend">
-      <option value="">All Trends</option>
+      <option value="">All</option>
       <option value="up">Increasing</option>
       <option value="down">Decreasing</option>
     </select>
@@ -132,115 +135,84 @@
     <button onclick="applyFilters()">Apply</button>
   </div>
 
-  <!-- CHART -->
-  <canvas id="priceChart"></canvas>
+  <canvas id="chart"></canvas>
 
-  <!-- RESULTS -->
   <div class="cards" id="results"></div>
 
 </div>
 
 <script>
 let allData = [];
-let chartInstance = null;
+let chart;
 
-// LOAD DATA
 async function loadData() {
   const res = await fetch("https://property-backend-pfil.onrender.com/data");
   allData = await res.json();
-
-  showData(allData);
-  calculateInsights(allData);
-  drawChart(allData);
+  update(allData);
 }
 
-// SHOW DATA
-function showData(data) {
-  let output = "";
-
-  if (data.length === 0) {
-    output = "No results found";
-  } else {
-    data.forEach(item => {
-      output += `
-        <div class="card">
-          <h3>${item.area}</h3>
-          <div class="price">₹${item.price}/sq ft</div>
-          <div class="${item.trend === 'up' ? 'trend-up' : 'trend-down'}">
-            ${item.trend === 'up' ? 'Increasing 📈' : 'Decreasing 📉'}
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  document.getElementById("results").innerHTML = output;
+function update(data) {
+  show(data);
+  insights(data);
+  draw(data);
 }
 
-// FILTER
-function applyFilters() {
-  const search = document.getElementById("search").value.toLowerCase();
-  const min = document.getElementById("minPrice").value;
-  const max = document.getElementById("maxPrice").value;
-  const trend = document.getElementById("trend").value;
-
-  let filtered = allData.filter(item => {
-    return (
-      item.area.toLowerCase().includes(search) &&
-      (!min || item.price >= min) &&
-      (!max || item.price <= max) &&
-      (!trend || item.trend === trend)
-    );
+function show(data) {
+  let html = "";
+  data.forEach(i => {
+    html += `
+      <div class="card">
+        <h3>${i.area}</h3>
+        <div class="price">₹${i.price}</div>
+        <div>${i.trend}</div>
+      </div>
+    `;
   });
-
-  showData(filtered);
-  calculateInsights(filtered);
-  drawChart(filtered);
+  document.getElementById("results").innerHTML = html;
 }
 
-// INSIGHTS
-function calculateInsights(data) {
-  if (data.length === 0) return;
-
+function insights(data) {
   let total = 0, up = 0, down = 0;
-
-  data.forEach(item => {
-    total += item.price;
-    item.trend === "up" ? up++ : down++;
+  data.forEach(i => {
+    total += i.price;
+    i.trend === "up" ? up++ : down++;
   });
 
-  const avg = Math.round(total / data.length);
-
-  document.getElementById("avgPrice").innerText = "₹" + avg;
+  document.getElementById("avgPrice").innerText = "₹" + Math.round(total/data.length);
   document.getElementById("totalAreas").innerText = data.length;
-  document.getElementById("marketTrend").innerText =
-    up > down ? "Growing 📈" : "Falling 📉";
+  document.getElementById("marketTrend").innerText = up > down ? "Growing" : "Falling";
 }
 
-// CHART
-function drawChart(data) {
-  const labels = data.map(i => i.area);
-  const prices = data.map(i => i.price);
+function draw(data) {
+  const ctx = document.getElementById("chart");
 
-  if (chartInstance) {
-    chartInstance.destroy(); // FIX overlap
-  }
+  if (chart) chart.destroy();
 
-  const ctx = document.getElementById("priceChart");
-
-  chartInstance = new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: labels,
-      datasets: [{
-        label: 'Price per sq ft',
-        data: prices
-      }]
+      labels: data.map(i => i.area),
+      datasets: [{ label: "Price", data: data.map(i => i.price) }]
     }
   });
 }
 
-// START
+function applyFilters() {
+  const s = document.getElementById("search").value.toLowerCase();
+  const min = document.getElementById("minPrice").value;
+  const max = document.getElementById("maxPrice").value;
+  const t = document.getElementById("trend").value;
+
+  const f = allData.filter(i =>
+    i.area.toLowerCase().includes(s) &&
+    (!min || i.price >= min) &&
+    (!max || i.price <= max) &&
+    (!t || i.trend === t)
+  );
+
+  update(f);
+}
+
 loadData();
 </script>
 
