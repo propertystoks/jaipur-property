@@ -129,7 +129,7 @@ async function loadData() {
   update(allData);
 }
 
-// UPDATE UI
+// UPDATE
 function update(data) {
   show(data);
   insights(data);
@@ -232,7 +232,7 @@ function applyFilters() {
   update(f);
 }
 
-// 💳 REAL PAYMENT FUNCTION
+// 💳 PAYMENT WITH UPI ENABLED
 async function unlock(area) {
 
   const res = await fetch("https://property-backend-pfil.onrender.com/create-order", {
@@ -242,7 +242,7 @@ async function unlock(area) {
   const order = await res.json();
 
   const options = {
-    key: "rzp_test_SkNACMV47PKF0S",
+    key: "YOUR_NEW_KEY_ID",
     amount: order.amount,
     currency: "INR",
     name: "PropertyStoks",
@@ -252,6 +252,17 @@ async function unlock(area) {
     handler: function () {
       alert("Payment Successful ✅");
       showReport(area);
+    },
+
+    theme: {
+      color: "#0a3d62"
+    },
+
+    method: {
+      upi: true,
+      card: true,
+      netbanking: true,
+      wallet: true
     }
   };
 
