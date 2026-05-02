@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+  <!-- Razorpay -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <style>
     body { margin:0; font-family: Arial; display:flex; }
 
@@ -134,7 +137,7 @@ function update(data) {
   loadMap(data);
 }
 
-// SHOW CARDS (WITH MONETIZATION)
+// SHOW CARDS
 function show(data) {
   let html = "";
   data.forEach(i => {
@@ -229,14 +232,31 @@ function applyFilters() {
   update(f);
 }
 
-// MONETIZATION (DEMO)
-function unlock(area) {
-  alert("Premium Report for " + area + "\n\nPay ₹99 to unlock");
+// 💳 REAL PAYMENT FUNCTION
+async function unlock(area) {
 
-  // Demo success
-  alert("Payment Successful ✅");
+  const res = await fetch("https://property-backend-pfil.onrender.com/create-order", {
+    method: "POST"
+  });
 
-  showReport(area);
+  const order = await res.json();
+
+  const options = {
+    key: "rzp_test_SkNACMV47PKF0S",
+    amount: order.amount,
+    currency: "INR",
+    name: "PropertyStoks",
+    description: "Premium Report",
+    order_id: order.id,
+
+    handler: function () {
+      alert("Payment Successful ✅");
+      showReport(area);
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
 }
 
 // PREMIUM REPORT
