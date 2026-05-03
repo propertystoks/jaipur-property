@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>PropertyStoks Pro</title>
-
+<div id="areas"></div>
   <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -267,7 +267,29 @@ async function unlock(area) {
   };
 
   const rzp = new Razorpay(options);
-  rzp.open();
+  rzp.open();<script>
+async function loadAreas() {
+  try {
+    const res = await fetch("https://property-backend-pfil.onrender.com/api/area");
+    const data = await res.json();
+
+    const container = document.getElementById("areas");
+
+    container.innerHTML = data.map(area => `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h3>${area.name}</h3>
+        <p>City: ${area.city}</p>
+        <p>Price: ₹${area.basePrice}</p>
+      </div>
+    `).join("");
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+loadAreas();
+</script>
 }
 
 // PREMIUM REPORT
