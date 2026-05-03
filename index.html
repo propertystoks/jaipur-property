@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>PropertyStoks Pro</title>
 
@@ -102,6 +103,19 @@
     .score {
       font-weight: bold;
       color: green;
+      margin-top: 10px;
+    }
+
+    .premium {
+      color: #0a7d2c;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .reason {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #444;
     }
   </style>
 </head>
@@ -117,6 +131,7 @@
   <h2>Jaipur Property Dashboard</h2>
 
   <div class="insights">
+
     <div class="box">
       Avg Price:
       <div id="avgPrice"></div>
@@ -131,9 +146,11 @@
       Trend:
       <div id="marketTrend"></div>
     </div>
+
   </div>
 
   <div class="filters">
+
     <input id="search" placeholder="Search area">
 
     <input id="minPrice" placeholder="Min Price">
@@ -147,6 +164,7 @@
     </select>
 
     <button onclick="applyFilters()">Apply</button>
+
   </div>
 
   <canvas id="chart"></canvas>
@@ -168,24 +186,45 @@ async function loadData() {
 
   try {
 
-    const res = await fetch("https://property-backend-pfil.onrender.com/api/area");
+    const res = await fetch(
+      "https://property-backend-pfil.onrender.com/api/area"
+    );
 
     const apiData = await res.json();
 
+    // REAL AI DATA
     allData = apiData.map(i => ({
+
       area: i.name,
+
+      city: i.city,
+
       price: i.basePrice,
-      trend: "up"
+
+      trend: "up",
+
+      connectivityScore: i.connectivityScore || 0,
+
+      infrastructureScore: i.infrastructureScore || 0,
+
+      demandScore: i.demandScore || 0,
+
+      developmentScore: i.developmentScore || 0,
+
+      livabilityScore: i.livabilityScore || 0
+
     }));
 
     update(allData);
 
   } catch (err) {
+
     console.error(err);
+
   }
 }
 
-// 🚀 UPDATE UI
+// 🚀 UPDATE
 function update(data) {
 
   show(data);
@@ -197,6 +236,59 @@ function update(data) {
   loadMap(data);
 }
 
+// 🚀 REAL AI SCORE
+function calculateScore(area) {
+
+  const total =
+
+    area.connectivityScore +
+
+    area.infrastructureScore +
+
+    area.demandScore +
+
+    area.developmentScore +
+
+    area.livabilityScore;
+
+  return (total / 10).toFixed(1);
+}
+
+// 🚀 PREMIUM LABEL
+function getPremiumLabel(score) {
+
+  if (score >= 8)
+    return "🟢 Premium Area";
+
+  if (score >= 6)
+    return "🟡 Emerging Area";
+
+  return "🔴 Risky Area";
+}
+
+// 🚀 REASON ENGINE
+function getReason(area) {
+
+  let reasons = [];
+
+  if (area.connectivityScore >= 18)
+    reasons.push("Excellent Connectivity");
+
+  if (area.infrastructureScore >= 15)
+    reasons.push("Strong Infrastructure");
+
+  if (area.demandScore >= 20)
+    reasons.push("High Buyer Demand");
+
+  if (area.developmentScore >= 10)
+    reasons.push("Future Growth Potential");
+
+  if (area.livabilityScore >= 10)
+    reasons.push("Good Livability");
+
+  return reasons.join(", ");
+}
+
 // 🚀 SHOW CARDS
 function show(data) {
 
@@ -204,17 +296,32 @@ function show(data) {
 
   data.forEach(i => {
 
+    const aiScore = calculateScore(i);
+
     html += `
+
       <div class="card">
 
         <h3>${i.area}</h3>
+
+        <div>📍 ${i.city}</div>
+
+        <br>
 
         <div>💰 Price: ₹${i.price}</div>
 
         <div>📈 Trend: ${i.trend}</div>
 
         <div class="score">
-          🧠 AI Score: ${calculateScore(i.price)}/10
+          🧠 AI Score: ${aiScore}/10
+        </div>
+
+        <div class="premium">
+          ${getPremiumLabel(aiScore)}
+        </div>
+
+        <div class="reason">
+          ${getReason(i)}
         </div>
 
         <br>
@@ -231,25 +338,13 @@ function show(data) {
   document.getElementById("results").innerHTML = html;
 }
 
-// 🚀 AI SCORE
-function calculateScore(price) {
-
-  if (price >= 8000) return 9;
-
-  if (price >= 6000) return 8;
-
-  if (price >= 5000) return 7;
-
-  if (price >= 4000) return 6;
-
-  return 5;
-}
-
 // 🚀 INSIGHTS
 function insights(data) {
 
   let total = 0;
+
   let up = 0;
+
   let down = 0;
 
   data.forEach(i => {
@@ -278,14 +373,19 @@ function drawChart(data) {
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
+
     type: "bar",
 
     data: {
+
       labels: data.map(i => i.area),
 
       datasets: [{
+
         label: "Price",
+
         data: data.map(i => i.price)
+
       }]
     }
   });
@@ -411,18 +511,23 @@ async function unlock(area) {
   }
 }
 
-// 📊 REPORT
+// 📊 PREMIUM REPORT
 function showReport(area) {
 
   alert(
+
     "📊 Premium Report: " + area +
 
     "\n\n- Expected Growth: High 📈" +
 
-    "\n- Investment Score: " +
-    calculateScore(6000) + "/10" +
+    "\n- Investment Score: Strong" +
 
-    "\n- Best Time: Next 6 months"
+    "\n- Future Appreciation: Positive" +
+
+    "\n- Best Time to Invest: Next 6 months" +
+
+    "\n- Investor Confidence: High"
+
   );
 }
 
