@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>PropertyStoks Pro</title>
-<div id="areas"></div>
+
   <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -122,14 +122,27 @@ let allData = [];
 let chart;
 let map;
 
-// LOAD DATA
+// 🚀 LOAD DATA FROM YOUR BACKEND
 async function loadData() {
-  const res = await fetch("https://property-backend-pfil.onrender.com/data");
-  allData = await res.json();
-  update(allData);
+  try {
+    const res = await fetch("https://property-backend-pfil.onrender.com/api/area");
+    const apiData = await res.json();
+
+    // convert backend data to frontend format
+    allData = apiData.map(i => ({
+      area: i.name,
+      price: i.basePrice,
+      trend: "up"
+    }));
+
+    update(allData);
+
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-// UPDATE
+// UPDATE UI
 function update(data) {
   show(data);
   insights(data);
@@ -204,7 +217,7 @@ function loadMap(data) {
   });
 }
 
-// COORDINATES
+// COORDS
 function getCoords(area) {
   const loc = {
     "vaishali nagar": [26.9115, 75.7406],
@@ -232,7 +245,7 @@ function applyFilters() {
   update(f);
 }
 
-// 💳 PAYMENT WITH UPI ENABLED
+// 💳 PAYMENT
 async function unlock(area) {
 
   const res = await fetch("https://property-backend-pfil.onrender.com/create-order", {
@@ -252,47 +265,14 @@ async function unlock(area) {
     handler: function () {
       alert("Payment Successful ✅");
       showReport(area);
-    },
-
-    theme: {
-      color: "#0a3d62"
-    },
-
-    method: {
-      upi: true,
-      card: true,
-      netbanking: true,
-      wallet: true
     }
   };
 
   const rzp = new Razorpay(options);
-  rzp.open();<script>
-async function loadAreas() {
-  try {
-    const res = await fetch("https://property-backend-pfil.onrender.com/api/area");
-    const data = await res.json();
-
-    const container = document.getElementById("areas");
-
-    container.innerHTML = data.map(area => `
-      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-        <h3>${area.name}</h3>
-        <p>City: ${area.city}</p>
-        <p>Price: ₹${area.basePrice}</p>
-      </div>
-    `).join("");
-
-  } catch (err) {
-    console.error(err);
-  }
+  rzp.open();
 }
 
-loadAreas();
-</script>
-}
-
-// PREMIUM REPORT
+// 📊 REPORT
 function showReport(area) {
   alert(
     "📊 Premium Report: " + area +
