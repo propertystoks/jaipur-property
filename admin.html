@@ -1,68 +1,149 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Admin</title>
+  <title>EstateQuant AI - Admin Panel</title>
+
+  <style>
+
+    body {
+      font-family: Arial;
+      background: #f5f6fa;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #0a3d62;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 550px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background: #0a3d62;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .success {
+      margin-top: 20px;
+      color: green;
+      font-weight: bold;
+    }
+
+  </style>
 </head>
+
 <body>
 
-<h2>Login</h2>
-<input id="username" placeholder="Username"><br>
-<input id="password" type="password" placeholder="Password"><br>
-<button onclick="login()">Login</button>
+<h1>🏠 EstateQuant AI - Admin Panel</h1>
 
-<div id="panel" style="display:none;">
-  <h2>Add Data</h2>
-  <input id="area" placeholder="Area"><br>
-  <input id="price" placeholder="Price"><br>
+<div class="box">
 
-  <select id="trend">
-    <option value="up">Increasing</option>
-    <option value="down">Decreasing</option>
-  </select><br>
+  <input id="name" placeholder="Area Name">
 
-  <button onclick="addData()">Add</button>
+  <input id="city" placeholder="City">
+
+  <input id="basePrice" placeholder="Base Price">
+
+  <input id="connectivityScore" placeholder="Connectivity Score">
+
+  <input id="infrastructureScore" placeholder="Infrastructure Score">
+
+  <input id="demandScore" placeholder="Demand Score">
+
+  <input id="developmentScore" placeholder="Development Score">
+
+  <input id="livabilityScore" placeholder="Livability Score">
+
+  <button onclick="addArea()">
+    Add Area
+  </button>
+
+  <div class="success" id="msg"></div>
+
 </div>
 
 <script>
-let token = "";
 
-async function login() {
-  const res = await fetch("https://property-backend-pfil.onrender.com/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      username: document.getElementById("username").value,
-      password: document.getElementById("password").value
-    })
-  });
+async function addArea() {
 
-  const data = await res.json();
+  const data = {
 
-  if (data.token) {
-    token = data.token;
-    document.getElementById("panel").style.display = "block";
-    alert("Login success");
-  } else {
-    alert("Login failed");
+    name:
+      document.getElementById("name").value,
+
+    city:
+      document.getElementById("city").value,
+
+    basePrice:
+      Number(document.getElementById("basePrice").value),
+
+    connectivityScore:
+      Number(document.getElementById("connectivityScore").value),
+
+    infrastructureScore:
+      Number(document.getElementById("infrastructureScore").value),
+
+    demandScore:
+      Number(document.getElementById("demandScore").value),
+
+    developmentScore:
+      Number(document.getElementById("developmentScore").value),
+
+    livabilityScore:
+      Number(document.getElementById("livabilityScore").value)
+  };
+
+  try {
+
+    const res = await fetch(
+      "https://property-backend-pfil.onrender.com/api/add-area",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(data)
+      }
+    );
+
+    const result = await res.json();
+
+    document.getElementById("msg").innerText =
+      "✅ Area Added Successfully";
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById("msg").innerText =
+      "❌ Error adding area";
   }
 }
 
-async function addData() {
-  await fetch("https://property-backend-pfil.onrender.com/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": token
-    },
-    body: JSON.stringify({
-      area: document.getElementById("area").value,
-      price: document.getElementById("price").value,
-      trend: document.getElementById("trend").value
-    })
-  });
-
-  alert("Added");
-}
 </script>
 
 </body>
