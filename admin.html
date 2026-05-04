@@ -20,8 +20,9 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
-      max-width: 550px;
+      max-width: 600px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
     }
 
     input {
@@ -34,7 +35,7 @@
     }
 
     button {
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 12px;
       width: 100%;
       background: #0a3d62;
@@ -45,10 +46,28 @@
       font-size: 16px;
     }
 
+    .delete-btn {
+      background: #c0392b;
+      margin-top: 10px;
+    }
+
     .success {
       margin-top: 20px;
       font-weight: bold;
       font-size: 15px;
+    }
+
+    .areas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
   </style>
@@ -84,8 +103,68 @@
 
 </div>
 
+
+<h2>📍 Existing Areas</h2>
+
+<div class="areas" id="areas"></div>
+
+
 <script>
 
+// LOAD AREAS
+async function loadAreas() {
+
+  try {
+
+    const res = await fetch(
+      "https://property-backend-pfil.onrender.com/api/area"
+    );
+
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(area => {
+
+      html += `
+
+        <div class="card">
+
+          <h3>${area.name}</h3>
+
+          <div>📍 ${area.city}</div>
+
+          <br>
+
+          <div>💰 Price: ₹${area.basePrice}</div>
+
+          <div>
+            🧠 AI Data Available
+          </div>
+
+          <button
+            class="delete-btn"
+            onclick="deleteArea('${area._id}')">
+
+            🗑 Delete
+
+          </button>
+
+        </div>
+      `;
+    });
+
+    document.getElementById("areas").innerHTML =
+      html;
+
+  } catch (err) {
+
+    console.error(err);
+  }
+}
+
+
+// ADD AREA
 async function addArea() {
 
   const data = {
@@ -142,6 +221,8 @@ async function addArea() {
       msg.innerText =
         "✅ Area Added Successfully";
 
+      loadAreas();
+
     } else {
 
       msg.style.color = "red";
@@ -163,6 +244,40 @@ async function addArea() {
       "❌ Server Error";
   }
 }
+
+
+// DELETE AREA
+async function deleteArea(id) {
+
+  const confirmDelete =
+    confirm("Delete this area?");
+
+  if (!confirmDelete) return;
+
+  try {
+
+    await fetch(
+      "https://property-backend-pfil.onrender.com/api/delete-area/" + id,
+      {
+        method: "DELETE"
+      }
+    );
+
+    alert("Area deleted successfully");
+
+    loadAreas();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Delete failed");
+  }
+}
+
+
+// START
+loadAreas();
 
 </script>
 
