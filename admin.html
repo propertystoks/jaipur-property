@@ -47,8 +47,8 @@
 
     .success {
       margin-top: 20px;
-      color: green;
       font-weight: bold;
+      font-size: 15px;
     }
 
   </style>
@@ -132,15 +132,35 @@ async function addArea() {
 
     const result = await res.json();
 
-    document.getElementById("msg").innerText =
-      "✅ Area Added Successfully";
+    const msg =
+      document.getElementById("msg");
+
+    if (res.ok) {
+
+      msg.style.color = "green";
+
+      msg.innerText =
+        "✅ Area Added Successfully";
+
+    } else {
+
+      msg.style.color = "red";
+
+      msg.innerText =
+        "❌ " + result.message;
+    }
 
   } catch (err) {
 
     console.error(err);
 
-    document.getElementById("msg").innerText =
-      "❌ Error adding area";
+    const msg =
+      document.getElementById("msg");
+
+    msg.style.color = "red";
+
+    msg.innerText =
+      "❌ Server Error";
   }
 }
 
