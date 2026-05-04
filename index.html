@@ -72,6 +72,11 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .delete-btn {
+      background: #c0392b;
     }
 
     .cards {
@@ -211,6 +216,7 @@ let chart;
 
 let map;
 
+
 // LOAD DATA
 async function loadData() {
 
@@ -223,6 +229,8 @@ async function loadData() {
     const apiData = await res.json();
 
     allData = apiData.map(i => ({
+
+      id: i._id,
 
       area: i.name,
 
@@ -253,6 +261,7 @@ async function loadData() {
   }
 }
 
+
 // UPDATE
 function update(data) {
 
@@ -264,6 +273,7 @@ function update(data) {
 
   loadMap(data);
 }
+
 
 // AI SCORE
 function calculateScore(area) {
@@ -283,6 +293,7 @@ function calculateScore(area) {
   return (total / 10).toFixed(1);
 }
 
+
 // LABEL
 function getPremiumLabel(score) {
 
@@ -295,7 +306,8 @@ function getPremiumLabel(score) {
   return "🔴 High Risk Zone";
 }
 
-// REASON ENGINE
+
+// REASONS
 function getReason(area) {
 
   let reasons = [];
@@ -317,6 +329,7 @@ function getReason(area) {
 
   return reasons.join(", ");
 }
+
 
 // SHOW CARDS
 function show(data) {
@@ -366,14 +379,49 @@ function show(data) {
           🔒 Unlock Full Report (₹99)
         </button>
 
+        <button class="delete-btn"
+          onclick="deleteArea('${i.id}')">
+          🗑 Delete
+        </button>
+
       </div>
 
     `;
-
   });
 
   document.getElementById("results").innerHTML = html;
 }
+
+
+// DELETE AREA
+async function deleteArea(id) {
+
+  const confirmDelete =
+    confirm("Delete this area?");
+
+  if (!confirmDelete) return;
+
+  try {
+
+    await fetch(
+      "https://property-backend-pfil.onrender.com/api/delete-area/" + id,
+      {
+        method: "DELETE"
+      }
+    );
+
+    alert("Area deleted");
+
+    loadData();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Delete failed");
+  }
+}
+
 
 // INSIGHTS
 function insights(data) {
@@ -402,6 +450,7 @@ function insights(data) {
     up > down ? "Growing" : "Falling";
 }
 
+
 // CHART
 function drawChart(data) {
 
@@ -428,6 +477,7 @@ function drawChart(data) {
   });
 }
 
+
 // MAP
 function loadMap(data) {
 
@@ -453,6 +503,7 @@ function loadMap(data) {
   });
 }
 
+
 // COORDS
 function getCoords(area) {
 
@@ -469,6 +520,7 @@ function getCoords(area) {
 
   return loc[area.toLowerCase()];
 }
+
 
 // FILTERS
 function applyFilters() {
@@ -499,6 +551,7 @@ function applyFilters() {
 
   update(f);
 }
+
 
 // PAYMENT
 async function unlock(area) {
@@ -548,6 +601,7 @@ async function unlock(area) {
   }
 }
 
+
 // REPORT
 function showReport(area) {
 
@@ -566,6 +620,7 @@ function showReport(area) {
     "\n- Best Time to Invest: Next 6 months"
   );
 }
+
 
 // START
 loadData();
