@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>PropertyStoks Pro</title>
+  <title>EstateQuant AI</title>
 
   <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,6 +15,7 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
+
     body {
       margin: 0;
       font-family: Arial;
@@ -46,9 +47,9 @@
     .box {
       background: white;
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 12px;
       min-width: 180px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
     }
 
     .filters {
@@ -76,15 +77,20 @@
     .cards {
       margin-top: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
       gap: 20px;
     }
 
     .card {
       background: white;
       padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
     }
 
     canvas {
@@ -104,6 +110,7 @@
       font-weight: bold;
       color: green;
       margin-top: 10px;
+      font-size: 17px;
     }
 
     .premium {
@@ -116,19 +123,34 @@
       margin-top: 10px;
       font-size: 14px;
       color: #444;
+      line-height: 1.5;
     }
+
+    .growth {
+      margin-top: 12px;
+      font-weight: bold;
+      color: #0a3d62;
+    }
+
   </style>
+
 </head>
 
 <body>
 
 <div class="sidebar">
-  <h2>🏠 PropertyStoks</h2>
+
+  <h2>🏠 EstateQuant AI</h2>
+
 </div>
 
 <div class="main">
 
-  <h2>Jaipur Property Dashboard</h2>
+  <h2>Jaipur Real Estate Intelligence Platform</h2>
+
+  <p style="color:gray; margin-top:-10px;">
+    AI-powered investment intelligence for smarter property decisions
+  </p>
 
   <div class="insights">
 
@@ -158,12 +180,18 @@
     <input id="maxPrice" placeholder="Max Price">
 
     <select id="trend">
+
       <option value="">All</option>
+
       <option value="up">Increasing</option>
+
       <option value="down">Decreasing</option>
+
     </select>
 
-    <button onclick="applyFilters()">Apply</button>
+    <button onclick="applyFilters()">
+      Apply
+    </button>
 
   </div>
 
@@ -178,10 +206,12 @@
 <script>
 
 let allData = [];
+
 let chart;
+
 let map;
 
-// 🚀 LOAD DATA
+// LOAD DATA
 async function loadData() {
 
   try {
@@ -192,7 +222,6 @@ async function loadData() {
 
     const apiData = await res.json();
 
-    // REAL AI DATA
     allData = apiData.map(i => ({
 
       area: i.name,
@@ -224,7 +253,7 @@ async function loadData() {
   }
 }
 
-// 🚀 UPDATE
+// UPDATE
 function update(data) {
 
   show(data);
@@ -236,7 +265,7 @@ function update(data) {
   loadMap(data);
 }
 
-// 🚀 REAL AI SCORE
+// AI SCORE
 function calculateScore(area) {
 
   const total =
@@ -254,19 +283,19 @@ function calculateScore(area) {
   return (total / 10).toFixed(1);
 }
 
-// 🚀 PREMIUM LABEL
+// LABEL
 function getPremiumLabel(score) {
 
   if (score >= 8)
-    return "🟢 Premium Area";
+    return "🟢 Premium Investment Zone";
 
   if (score >= 6)
-    return "🟡 Emerging Area";
+    return "🟡 Emerging Growth Zone";
 
-  return "🔴 Risky Area";
+  return "🔴 High Risk Zone";
 }
 
-// 🚀 REASON ENGINE
+// REASON ENGINE
 function getReason(area) {
 
   let reasons = [];
@@ -289,7 +318,7 @@ function getReason(area) {
   return reasons.join(", ");
 }
 
-// 🚀 SHOW CARDS
+// SHOW CARDS
 function show(data) {
 
   let html = "";
@@ -324,6 +353,13 @@ function show(data) {
           ${getReason(i)}
         </div>
 
+        <div class="growth">
+          🚀 Growth Potential:
+          ${aiScore >= 8 ? "Very High" :
+            aiScore >= 6 ? "Moderate" :
+            "Low"}
+        </div>
+
         <br>
 
         <button onclick="unlock('${i.area}')">
@@ -331,6 +367,7 @@ function show(data) {
         </button>
 
       </div>
+
     `;
 
   });
@@ -338,7 +375,7 @@ function show(data) {
   document.getElementById("results").innerHTML = html;
 }
 
-// 🚀 INSIGHTS
+// INSIGHTS
 function insights(data) {
 
   let total = 0;
@@ -365,7 +402,7 @@ function insights(data) {
     up > down ? "Growing" : "Falling";
 }
 
-// 🚀 CHART
+// CHART
 function drawChart(data) {
 
   const ctx = document.getElementById("chart");
@@ -391,7 +428,7 @@ function drawChart(data) {
   });
 }
 
-// 🚀 MAP
+// MAP
 function loadMap(data) {
 
   if (!map) {
@@ -416,7 +453,7 @@ function loadMap(data) {
   });
 }
 
-// 🚀 COORDS
+// COORDS
 function getCoords(area) {
 
   const loc = {
@@ -433,7 +470,7 @@ function getCoords(area) {
   return loc[area.toLowerCase()];
 }
 
-// 🚀 FILTERS
+// FILTERS
 function applyFilters() {
 
   const s =
@@ -463,7 +500,7 @@ function applyFilters() {
   update(f);
 }
 
-// 💳 PAYMENT
+// PAYMENT
 async function unlock(area) {
 
   try {
@@ -485,9 +522,9 @@ async function unlock(area) {
 
       currency: "INR",
 
-      name: "PropertyStoks",
+      name: "EstateQuant AI",
 
-      description: "Premium Report",
+      description: "Premium Intelligence Report",
 
       order_id: order.id,
 
@@ -511,12 +548,12 @@ async function unlock(area) {
   }
 }
 
-// 📊 PREMIUM REPORT
+// REPORT
 function showReport(area) {
 
   alert(
 
-    "📊 Premium Report: " + area +
+    "📊 EstateQuant AI Report: " + area +
 
     "\n\n- Expected Growth: High 📈" +
 
@@ -524,14 +561,13 @@ function showReport(area) {
 
     "\n- Future Appreciation: Positive" +
 
-    "\n- Best Time to Invest: Next 6 months" +
+    "\n- Investor Confidence: High" +
 
-    "\n- Investor Confidence: High"
-
+    "\n- Best Time to Invest: Next 6 months"
   );
 }
 
-// 🚀 START
+// START
 loadData();
 
 </script>
