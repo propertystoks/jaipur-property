@@ -75,10 +75,6 @@
       margin-top: 8px;
     }
 
-    .delete-btn {
-      background: #c0392b;
-    }
-
     .cards {
       margin-top: 20px;
       display: grid;
@@ -230,8 +226,6 @@ async function loadData() {
 
     allData = apiData.map(i => ({
 
-      id: i._id,
-
       area: i.name,
 
       city: i.city,
@@ -307,7 +301,7 @@ function getPremiumLabel(score) {
 }
 
 
-// REASONS
+// REASON ENGINE
 function getReason(area) {
 
   let reasons = [];
@@ -379,47 +373,12 @@ function show(data) {
           🔒 Unlock Full Report (₹99)
         </button>
 
-        <button class="delete-btn"
-          onclick="deleteArea('${i.id}')">
-          🗑 Delete
-        </button>
-
       </div>
 
     `;
   });
 
   document.getElementById("results").innerHTML = html;
-}
-
-
-// DELETE AREA
-async function deleteArea(id) {
-
-  const confirmDelete =
-    confirm("Delete this area?");
-
-  if (!confirmDelete) return;
-
-  try {
-
-    await fetch(
-      "https://property-backend-pfil.onrender.com/api/delete-area/" + id,
-      {
-        method: "DELETE"
-      }
-    );
-
-    alert("Area deleted");
-
-    loadData();
-
-  } catch (err) {
-
-    console.error(err);
-
-    alert("Delete failed");
-  }
 }
 
 
