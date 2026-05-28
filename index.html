@@ -2,13 +2,16 @@
 <html>
 
 <head>
+
   <title>EstateQuant AI</title>
 
   <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet Map -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <!-- Razorpay -->
@@ -20,25 +23,60 @@
       margin: 0;
       font-family: Arial;
       display: flex;
-      background: #f5f6fa;
+      background: #f4f6f9;
     }
 
+    /* SIDEBAR */
+
     .sidebar {
-      width: 220px;
+      width: 240px;
       background: #0a3d62;
       color: white;
       height: 100vh;
-      padding: 20px;
+      padding: 25px;
       position: fixed;
     }
 
-    .main {
-      margin-left: 260px;
-      flex: 1;
-      padding: 20px;
+    .sidebar h2 {
+      margin-bottom: 5px;
     }
 
+    .sidebar p {
+      color: #dfe6e9;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* MAIN */
+
+    .main {
+      margin-left: 290px;
+      flex: 1;
+      padding: 25px;
+    }
+
+    .hero {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .hero h1 {
+      margin: 0;
+      color: #0a3d62;
+    }
+
+    .hero p {
+      color: #666;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    /* INSIGHTS */
+
     .insights {
+      margin-top: 25px;
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
@@ -46,47 +84,89 @@
 
     .box {
       background: white;
-      padding: 15px;
-      border-radius: 12px;
-      min-width: 180px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      padding: 20px;
+      border-radius: 14px;
+      min-width: 200px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
+    .box-title {
+      color: gray;
+      font-size: 14px;
+    }
+
+    .box-value {
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #0a3d62;
+    }
+
+    /* FILTERS */
+
     .filters {
-      margin-top: 20px;
+      margin-top: 25px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     input, select {
-      padding: 10px;
-      border-radius: 5px;
+      padding: 12px;
+      border-radius: 8px;
       border: 1px solid #ccc;
+      min-width: 180px;
     }
 
     button {
-      padding: 10px 14px;
+      padding: 12px 18px;
       background: #0a3d62;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 8px;
+      font-weight: bold;
     }
 
+    button:hover {
+      opacity: 0.9;
+    }
+
+    /* CHART */
+
+    canvas {
+      margin-top: 25px;
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    /* MAP */
+
+    #map {
+      height: 450px;
+      margin-top: 25px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    /* CARDS */
+
     .cards {
-      margin-top: 20px;
+      margin-top: 30px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-      gap: 20px;
+      grid-template-columns:
+      repeat(auto-fit, minmax(320px,1fr));
+      gap: 25px;
     }
 
     .card {
       background: white;
-      padding: 18px;
-      border-radius: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: 0.3s;
     }
 
@@ -94,43 +174,46 @@
       transform: translateY(-5px);
     }
 
-    canvas {
-      margin-top: 20px;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    #map {
-      height: 400px;
-      margin-top: 20px;
-      border-radius: 10px;
+    .card h3 {
+      margin-top: 0;
+      color: #0a3d62;
     }
 
     .score {
+      font-size: 20px;
       font-weight: bold;
       color: green;
-      margin-top: 10px;
-      font-size: 17px;
+      margin-top: 12px;
     }
 
-    .premium {
-      color: #0a7d2c;
-      font-weight: bold;
+    .tag {
       margin-top: 10px;
+      display: inline-block;
+      background: #eafaf1;
+      color: #0a7d2c;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
     }
 
     .reason {
-      margin-top: 10px;
+      margin-top: 15px;
+      color: #555;
+      line-height: 1.7;
       font-size: 14px;
-      color: #444;
-      line-height: 1.5;
     }
 
     .growth {
-      margin-top: 12px;
+      margin-top: 15px;
       font-weight: bold;
       color: #0a3d62;
+    }
+
+    .price {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
     }
 
   </style>
@@ -139,70 +222,151 @@
 
 <body>
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
-  <h2>🏠 EstateQuant AI</h2>
+  <h2>🧠 EstateQuant AI</h2>
+
+  <p>
+    Urban Intelligence Engine
+  </p>
+
+  <hr style="margin:20px 0; border-color:#1e5a87;">
+
+  <p>
+    📍 Area Intelligence
+  </p>
+
+  <p>
+    🚉 Connectivity Mapping
+  </p>
+
+  <p>
+    🏫 Ecosystem Analysis
+  </p>
+
+  <p>
+    🏗 Builder Intelligence
+  </p>
+
+  <p>
+    📈 Growth Corridors
+  </p>
 
 </div>
 
+
+<!-- MAIN -->
+
 <div class="main">
 
-  <h2>Jaipur Real Estate Intelligence Platform</h2>
+  <!-- HERO -->
 
-  <p style="color:gray; margin-top:-10px;">
-    AI-powered investment intelligence for smarter property decisions
-  </p>
+  <div class="hero">
+
+    <h1>🏙 EstateQuant AI</h1>
+
+    <p>
+
+      AI-powered Urban Intelligence Platform for smarter
+      real estate and investment decisions across Jaipur’s
+      emerging growth corridors.
+
+    </p>
+
+  </div>
+
+
+  <!-- INSIGHTS -->
 
   <div class="insights">
 
     <div class="box">
-      Avg Price:
-      <div id="avgPrice"></div>
+
+      <div class="box-title">
+        Average Market Price
+      </div>
+
+      <div class="box-value" id="avgPrice"></div>
+
     </div>
 
     <div class="box">
-      Total Areas:
-      <div id="totalAreas"></div>
+
+      <div class="box-title">
+        Total Intelligence Zones
+      </div>
+
+      <div class="box-value" id="totalAreas"></div>
+
     </div>
 
     <div class="box">
-      Trend:
-      <div id="marketTrend"></div>
+
+      <div class="box-title">
+        Market Direction
+      </div>
+
+      <div class="box-value" id="marketTrend"></div>
+
     </div>
 
   </div>
 
+
+  <!-- FILTERS -->
+
   <div class="filters">
 
-    <input id="search" placeholder="Search area">
+    <input id="search"
+      placeholder="Search area">
 
-    <input id="minPrice" placeholder="Min Price">
+    <input id="minPrice"
+      placeholder="Min Price">
 
-    <input id="maxPrice" placeholder="Max Price">
+    <input id="maxPrice"
+      placeholder="Max Price">
 
     <select id="trend">
 
-      <option value="">All</option>
+      <option value="">All Trends</option>
 
-      <option value="up">Increasing</option>
+      <option value="up">
+        Increasing
+      </option>
 
-      <option value="down">Decreasing</option>
+      <option value="down">
+        Decreasing
+      </option>
 
     </select>
 
     <button onclick="applyFilters()">
-      Apply
+
+      Apply Filters
+
     </button>
 
   </div>
 
+
+  <!-- CHART -->
+
   <canvas id="chart"></canvas>
 
+
+  <!-- MAP -->
+
   <div id="map"></div>
+
+
+  <!-- CARDS -->
 
   <div class="cards" id="results"></div>
 
 </div>
+
 
 <script>
 
@@ -233,6 +397,12 @@ async function loadData() {
       price: i.basePrice,
 
       trend: "up",
+
+      areaType: i.areaType || "",
+
+      growthTag: i.growthTag || "",
+
+      aiSummary: i.aiSummary || "",
 
       connectivityScore: i.connectivityScore || 0,
 
@@ -266,6 +436,7 @@ function update(data) {
   drawChart(data);
 
   loadMap(data);
+
 }
 
 
@@ -285,6 +456,7 @@ function calculateScore(area) {
     area.livabilityScore;
 
   return (total / 10).toFixed(1);
+
 }
 
 
@@ -292,36 +464,13 @@ function calculateScore(area) {
 function getPremiumLabel(score) {
 
   if (score >= 8)
-    return "🟢 Premium Investment Zone";
+    return "🟢 Premium Growth Corridor";
 
   if (score >= 6)
-    return "🟡 Emerging Growth Zone";
+    return "🟡 Emerging Investment Zone";
 
-  return "🔴 High Risk Zone";
-}
+  return "🔴 Developing Zone";
 
-
-// REASON ENGINE
-function getReason(area) {
-
-  let reasons = [];
-
-  if (area.connectivityScore >= 18)
-    reasons.push("Excellent Connectivity");
-
-  if (area.infrastructureScore >= 15)
-    reasons.push("Strong Infrastructure");
-
-  if (area.demandScore >= 20)
-    reasons.push("High Buyer Demand");
-
-  if (area.developmentScore >= 10)
-    reasons.push("Future Growth Potential");
-
-  if (area.livabilityScore >= 10)
-    reasons.push("Good Livability");
-
-  return reasons.join(", ");
 }
 
 
@@ -332,45 +481,49 @@ function show(data) {
 
   data.forEach(i => {
 
-    const aiScore = calculateScore(i);
+    const aiScore =
+      calculateScore(i);
 
     html += `
 
       <div class="card">
 
-        <h3>${i.area}</h3>
+        <h3>📍 ${i.area}</h3>
 
-        <div>📍 ${i.city}</div>
+        <div>${i.city}</div>
 
-        <br>
-
-        <div>💰 Price: ₹${i.price}</div>
-
-        <div>📈 Trend: ${i.trend}</div>
+        <div class="price">
+          ₹${i.price}
+        </div>
 
         <div class="score">
           🧠 AI Score: ${aiScore}/10
         </div>
 
-        <div class="premium">
+        <div class="tag">
           ${getPremiumLabel(aiScore)}
         </div>
 
         <div class="reason">
-          ${getReason(i)}
+
+          ${i.aiSummary ||
+
+          "Urban intelligence profile available."}
+
         </div>
 
         <div class="growth">
-          🚀 Growth Potential:
-          ${aiScore >= 8 ? "Very High" :
-            aiScore >= 6 ? "Moderate" :
-            "Low"}
+
+          📈 ${i.growthTag || "Growth Zone"}
+
         </div>
 
         <br>
 
-        <button onclick="unlock('${i.area}')">
-          🔒 Unlock Full Report (₹99)
+        <button onclick="showReport('${i.area}')">
+
+          Explore Intelligence
+
         </button>
 
       </div>
@@ -378,7 +531,9 @@ function show(data) {
     `;
   });
 
-  document.getElementById("results").innerHTML = html;
+  document.getElementById("results")
+    .innerHTML = html;
+
 }
 
 
@@ -387,35 +542,35 @@ function insights(data) {
 
   let total = 0;
 
-  let up = 0;
-
-  let down = 0;
-
   data.forEach(i => {
 
     total += i.price;
 
-    i.trend === "up" ? up++ : down++;
-
   });
 
-  document.getElementById("avgPrice").innerText =
+  document.getElementById("avgPrice")
+    .innerText =
     "₹" + Math.round(total / data.length);
 
-  document.getElementById("totalAreas").innerText =
+  document.getElementById("totalAreas")
+    .innerText =
     data.length;
 
-  document.getElementById("marketTrend").innerText =
-    up > down ? "Growing" : "Falling";
+  document.getElementById("marketTrend")
+    .innerText =
+    "Growing";
+
 }
 
 
 // CHART
 function drawChart(data) {
 
-  const ctx = document.getElementById("chart");
+  const ctx =
+    document.getElementById("chart");
 
-  if (chart) chart.destroy();
+  if (chart)
+    chart.destroy();
 
   chart = new Chart(ctx, {
 
@@ -423,17 +578,21 @@ function drawChart(data) {
 
     data: {
 
-      labels: data.map(i => i.area),
+      labels:
+        data.map(i => i.area),
 
       datasets: [{
 
-        label: "Price",
+        label: "Area Market Price",
 
-        data: data.map(i => i.price)
+        data:
+          data.map(i => i.price)
 
       }]
     }
+
   });
+
 }
 
 
@@ -442,24 +601,37 @@ function loadMap(data) {
 
   if (!map) {
 
-    map = L.map('map').setView([26.9124, 75.7873], 11);
+    map = L.map('map')
+      .setView([26.9124, 75.7873], 11);
 
     L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     ).addTo(map);
+
   }
 
   data.forEach(i => {
 
-    const coords = getCoords(i.area);
+    const coords =
+      getCoords(i.area);
 
     if (coords) {
 
       L.marker(coords)
+
         .addTo(map)
-        .bindPopup(`${i.area} - ₹${i.price}`);
+
+        .bindPopup(
+
+          `<b>${i.area}</b><br>
+          ₹${i.price}`
+
+        );
+
     }
+
   });
+
 }
 
 
@@ -468,16 +640,22 @@ function getCoords(area) {
 
   const loc = {
 
-    "vaishali nagar": [26.9115, 75.7406],
+    "panchyawala": [26.9445, 75.7015],
 
-    "mansarovar": [26.8550, 75.7640],
+    "sirsi": [26.9500, 75.6900],
+
+    "kanakpura": [26.9140, 75.7010],
+
+    "vaishali nagar": [26.9115, 75.7406],
 
     "jagatpura": [26.8440, 75.8230],
 
     "malviya nagar": [26.8500, 75.8100]
+
   };
 
   return loc[area.toLowerCase()];
+
 }
 
 
@@ -497,67 +675,21 @@ function applyFilters() {
   const t =
     document.getElementById("trend").value;
 
-  const f = allData.filter(i =>
+  const filtered =
+    allData.filter(i =>
 
-    i.area.toLowerCase().includes(s) &&
+      i.area.toLowerCase().includes(s) &&
 
-    (!min || i.price >= min) &&
+      (!min || i.price >= min) &&
 
-    (!max || i.price <= max) &&
+      (!max || i.price <= max) &&
 
-    (!t || i.trend === t)
-  );
+      (!t || i.trend === t)
 
-  update(f);
-}
-
-
-// PAYMENT
-async function unlock(area) {
-
-  try {
-
-    const res = await fetch(
-      "https://property-backend-pfil.onrender.com/create-order",
-      {
-        method: "POST"
-      }
     );
 
-    const order = await res.json();
+  update(filtered);
 
-    const options = {
-
-      key: "rzp_test_SkNACMV47PKF0S",
-
-      amount: order.amount,
-
-      currency: "INR",
-
-      name: "EstateQuant AI",
-
-      description: "Premium Intelligence Report",
-
-      order_id: order.id,
-
-      handler: function () {
-
-        alert("Payment Successful ✅");
-
-        showReport(area);
-      }
-    };
-
-    const rzp = new Razorpay(options);
-
-    rzp.open();
-
-  } catch (err) {
-
-    console.error(err);
-
-    alert("Payment failed");
-  }
 }
 
 
@@ -566,18 +698,24 @@ function showReport(area) {
 
   alert(
 
-    "📊 EstateQuant AI Report: " + area +
+    "📍 EstateQuant AI Intelligence Report: "
 
-    "\n\n- Expected Growth: High 📈" +
+    + area +
 
-    "\n- Investment Score: Strong" +
+    "\n\n🧠 Full Urban Intelligence Profile"
 
-    "\n- Future Appreciation: Positive" +
+    + "\n🚉 Connectivity Analysis"
 
-    "\n- Investor Confidence: High" +
+    + "\n🏫 Ecosystem Mapping"
 
-    "\n- Best Time to Invest: Next 6 months"
+    + "\n🏗 Builder Intelligence"
+
+    + "\n📈 Growth Corridor Analysis"
+
+    + "\n💰 Market Pricing Intelligence"
+
   );
+
 }
 
 
@@ -587,4 +725,5 @@ loadData();
 </script>
 
 </body>
+
 </html>
