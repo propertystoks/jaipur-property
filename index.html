@@ -5,17 +5,14 @@
 
   <title>EstateQuant AI</title>
 
-  <!-- Chart -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Leaflet Map -->
+  <!-- Leaflet -->
   <link rel="stylesheet"
     href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- Razorpay -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
 
@@ -29,12 +26,14 @@
     /* SIDEBAR */
 
     .sidebar {
+
       width: 240px;
       background: #0a3d62;
       color: white;
       height: 100vh;
       padding: 25px;
       position: fixed;
+
     }
 
     .sidebar h2 {
@@ -42,24 +41,30 @@
     }
 
     .sidebar p {
+
       color: #dfe6e9;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.7;
+
     }
 
     /* MAIN */
 
     .main {
+
       margin-left: 290px;
       flex: 1;
       padding: 25px;
+
     }
 
     .hero {
+
       background: white;
       padding: 25px;
       border-radius: 14px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
     }
 
     .hero h1 {
@@ -68,57 +73,72 @@
     }
 
     .hero p {
+
       color: #666;
       margin-top: 10px;
       line-height: 1.7;
+
     }
 
     /* INSIGHTS */
 
     .insights {
+
       margin-top: 25px;
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+
     }
 
     .box {
+
       background: white;
       padding: 20px;
       border-radius: 14px;
       min-width: 200px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
     }
 
     .box-title {
+
       color: gray;
       font-size: 14px;
+
     }
 
     .box-value {
+
       margin-top: 10px;
       font-size: 24px;
       font-weight: bold;
       color: #0a3d62;
+
     }
 
     /* FILTERS */
 
     .filters {
+
       margin-top: 25px;
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+
     }
 
     input, select {
+
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #ccc;
       min-width: 180px;
+
     }
 
     button {
+
       padding: 12px 18px;
       background: #0a3d62;
       color: white;
@@ -126,6 +146,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+
     }
 
     button:hover {
@@ -135,58 +156,73 @@
     /* CHART */
 
     canvas {
+
       margin-top: 25px;
       background: white;
       padding: 20px;
       border-radius: 14px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
     }
 
     /* MAP */
 
     #map {
+
       height: 450px;
       margin-top: 25px;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
     }
 
     /* CARDS */
 
     .cards {
+
       margin-top: 30px;
       display: grid;
       grid-template-columns:
       repeat(auto-fit, minmax(320px,1fr));
       gap: 25px;
+
     }
 
     .card {
+
       background: white;
       padding: 22px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: 0.3s;
+
     }
 
     .card:hover {
+
       transform: translateY(-5px);
+
     }
 
     .card h3 {
+
       margin-top: 0;
       color: #0a3d62;
+
     }
 
     .score {
+
       font-size: 20px;
       font-weight: bold;
       color: green;
       margin-top: 12px;
+
     }
 
     .tag {
+
       margin-top: 10px;
       display: inline-block;
       background: #eafaf1;
@@ -195,25 +231,32 @@
       border-radius: 20px;
       font-size: 13px;
       font-weight: bold;
+
     }
 
     .reason {
+
       margin-top: 15px;
       color: #555;
       line-height: 1.7;
       font-size: 14px;
+
     }
 
     .growth {
+
       margin-top: 15px;
       font-weight: bold;
       color: #0a3d62;
+
     }
 
     .price {
+
       margin-top: 10px;
       font-size: 18px;
       font-weight: bold;
+
     }
 
   </style>
@@ -234,25 +277,15 @@
 
   <hr style="margin:20px 0; border-color:#1e5a87;">
 
-  <p>
-    📍 Area Intelligence
-  </p>
+  <p>📍 Area Intelligence</p>
 
-  <p>
-    🚉 Connectivity Mapping
-  </p>
+  <p>🚉 Connectivity Mapping</p>
 
-  <p>
-    🏫 Ecosystem Analysis
-  </p>
+  <p>🏫 Ecosystem Analysis</p>
 
-  <p>
-    🏗 Builder Intelligence
-  </p>
+  <p>🏗 Builder Intelligence</p>
 
-  <p>
-    📈 Growth Corridors
-  </p>
+  <p>📈 Growth Corridors</p>
 
 </div>
 
@@ -336,10 +369,6 @@
         Increasing
       </option>
 
-      <option value="down">
-        Decreasing
-      </option>
-
     </select>
 
     <button onclick="applyFilters()">
@@ -394,25 +423,32 @@ async function loadData() {
 
       city: i.city,
 
-      price: i.basePrice,
+      price: i.basePrice || 0,
 
       trend: "up",
 
       areaType: i.areaType || "",
 
-      growthTag: i.growthTag || "",
+      growthTag:
+        i.growthTag || "",
 
-      aiSummary: i.aiSummary || "",
+      aiSummary:
+        i.aiSummary?.text || "",
 
-      connectivityScore: i.connectivityScore || 0,
+      connectivityScore:
+        i.connectivityScore?.value || 0,
 
-      infrastructureScore: i.infrastructureScore || 0,
+      infrastructureScore:
+        i.infrastructureScore?.value || 0,
 
-      demandScore: i.demandScore || 0,
+      demandScore:
+        i.demandScore?.value || 0,
 
-      developmentScore: i.developmentScore || 0,
+      developmentScore:
+        i.developmentScore?.value || 0,
 
-      livabilityScore: i.livabilityScore || 0
+      livabilityScore:
+        i.livabilityScore?.value || 0
 
     }));
 
@@ -423,6 +459,7 @@ async function loadData() {
     console.error(err);
 
   }
+
 }
 
 
@@ -445,23 +482,25 @@ function calculateScore(area) {
 
   const total =
 
-    area.connectivityScore +
+    Number(area.connectivityScore || 0) +
 
-    area.infrastructureScore +
+    Number(area.infrastructureScore || 0) +
 
-    area.demandScore +
+    Number(area.demandScore || 0) +
 
-    area.developmentScore +
+    Number(area.developmentScore || 0) +
 
-    area.livabilityScore;
+    Number(area.livabilityScore || 0);
 
-  return (total / 10).toFixed(1);
+  return (total / 5).toFixed(1);
 
 }
 
 
 // LABEL
 function getPremiumLabel(score) {
+
+  score = Number(score);
 
   if (score >= 8)
     return "🟢 Premium Growth Corridor";
@@ -508,7 +547,7 @@ function show(data) {
 
           ${i.aiSummary ||
 
-          "Urban intelligence profile available."}
+          "Verified intelligence profile available."}
 
         </div>
 
@@ -544,7 +583,7 @@ function insights(data) {
 
   data.forEach(i => {
 
-    total += i.price;
+    total += Number(i.price || 0);
 
   });
 
@@ -642,6 +681,8 @@ function getCoords(area) {
 
     "panchyawala": [26.9445, 75.7015],
 
+    "panchyawala v2": [26.9445, 75.7015],
+
     "sirsi": [26.9500, 75.6900],
 
     "kanakpura": [26.9140, 75.7010],
@@ -672,9 +713,6 @@ function applyFilters() {
   const max =
     document.getElementById("maxPrice").value;
 
-  const t =
-    document.getElementById("trend").value;
-
   const filtered =
     allData.filter(i =>
 
@@ -682,9 +720,7 @@ function applyFilters() {
 
       (!min || i.price >= min) &&
 
-      (!max || i.price <= max) &&
-
-      (!t || i.trend === t)
+      (!max || i.price <= max)
 
     );
 
@@ -698,21 +734,19 @@ function showReport(area) {
 
   alert(
 
-    "📍 EstateQuant AI Intelligence Report: "
+    "🧠 EstateQuant Verified Intelligence Report"
 
-    + area +
+    + "\n\n📍 " + area +
 
-    "\n\n🧠 Full Urban Intelligence Profile"
+    "\n\n🚉 Verified Connectivity"
 
-    + "\n🚉 Connectivity Analysis"
-
-    + "\n🏫 Ecosystem Mapping"
+    + "\n🏫 Verified Ecosystem"
 
     + "\n🏗 Builder Intelligence"
 
     + "\n📈 Growth Corridor Analysis"
 
-    + "\n💰 Market Pricing Intelligence"
+    + "\n💰 Market Intelligence"
 
   );
 
