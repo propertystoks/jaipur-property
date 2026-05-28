@@ -3,13 +3,13 @@
 
 <head>
 
-  <title>EstateQuant AI - Intelligence Admin</title>
+  <title>EstateQuant AI - Intelligence Console</title>
 
   <style>
 
     body {
       font-family: Arial;
-      background: #f5f6fa;
+      background: #f4f6f9;
       padding: 30px;
     }
 
@@ -21,25 +21,28 @@
       background: white;
       padding: 25px;
       border-radius: 12px;
-      max-width: 850px;
+      max-width: 1000px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       margin-bottom: 30px;
     }
 
-    input, textarea {
+    input, textarea, select {
+
       width: 100%;
       padding: 12px;
       margin-top: 10px;
       border-radius: 6px;
       border: 1px solid #ccc;
       box-sizing: border-box;
+
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 90px;
     }
 
     button {
+
       margin-top: 20px;
       padding: 14px;
       width: 100%;
@@ -49,41 +52,28 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
+
     }
 
-    .delete-btn {
-      background: #c0392b;
-      margin-top: 12px;
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .section {
+
+      margin-top: 35px;
+      border-top: 2px solid #eee;
+      padding-top: 25px;
+
+    }
+
+    .section h2 {
+      color: #0a3d62;
     }
 
     .success {
       margin-top: 20px;
       font-weight: bold;
-    }
-
-    .areas {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    h2 {
-      margin-top: 40px;
-      color: #0a3d62;
-    }
-
-    .section-title {
-      margin-top: 25px;
-      font-weight: bold;
-      color: #0a3d62;
-      font-size: 18px;
     }
 
   </style>
@@ -92,98 +82,167 @@
 
 <body>
 
-<h1>🏠 EstateQuant AI - Intelligence Admin</h1>
+<h1>🧠 EstateQuant AI - Intelligence Console</h1>
 
 <div class="box">
 
-  <div class="section-title">📍 Basic Information</div>
+  <!-- BASIC -->
 
-  <input id="name" placeholder="Area Name">
+  <div class="section">
 
-  <input id="city" placeholder="City">
+    <h2>📍 Basic Information</h2>
 
-  <input id="basePrice" placeholder="Base Price">
+    <input id="name" placeholder="Area Name">
 
-  <input id="areaType" placeholder="Area Type">
+    <input id="city" placeholder="City">
 
-  <input id="growthTag" placeholder="Growth Tag">
+    <input id="basePrice" placeholder="Base Price">
 
+    <input id="areaType" placeholder="Area Type">
 
-  <div class="section-title">🧠 AI Scores</div>
+    <input id="growthTag" placeholder="Growth Tag">
 
-  <input id="connectivityScore" placeholder="Connectivity Score">
-
-  <input id="infrastructureScore" placeholder="Infrastructure Score">
-
-  <input id="demandScore" placeholder="Demand Score">
-
-  <input id="developmentScore" placeholder="Development Score">
-
-  <input id="livabilityScore" placeholder="Livability Score">
+  </div>
 
 
-  <div class="section-title">🚉 Connectivity Intelligence</div>
+  <!-- CONNECTIVITY -->
 
-  <input id="jaipurJunctionDistance" placeholder="Jaipur Junction Distance">
+  <div class="section">
 
-  <input id="sindhiCampDistance" placeholder="Sindhi Camp Distance">
+    <h2>🚉 Connectivity Intelligence</h2>
 
-  <input id="nearestMetro" placeholder="Nearest Metro Station">
+    <input id="jaipurDistance"
+      placeholder="Jaipur Junction Distance">
 
-  <input id="metroDistance" placeholder="Metro Distance">
+    <input id="metro"
+      placeholder="Nearest Metro">
 
-  <input id="nearestRailway" placeholder="Nearest Railway Station">
+    <input id="metroDistance"
+      placeholder="Metro Distance">
 
-  <input id="railwayDistance" placeholder="Railway Distance">
+    <input id="railway"
+      placeholder="Nearest Railway">
 
+    <input id="railwayDistance"
+      placeholder="Railway Distance">
 
-  <div class="section-title">🧠 Urban Intelligence</div>
+    <input id="connectivitySource"
+      placeholder="Connectivity Source">
 
-  <input id="growthCorridor" placeholder="Growth Corridor">
+    <select id="connectivityConfidence">
 
-  <textarea id="urbanPosition"
-    placeholder="Urban Position"></textarea>
+      <option>High</option>
+      <option>Medium</option>
+      <option>Estimated</option>
 
-  <textarea id="futureGrowth"
-    placeholder="Future Growth"></textarea>
+    </select>
 
-  <textarea id="aiSummary"
-    placeholder="AI Summary"></textarea>
-
-
-  <div class="section-title">🏫 Schools</div>
-
-  <textarea id="schools"
-    placeholder="Enter schools separated by commas"></textarea>
-
-
-  <div class="section-title">🏥 Hospitals</div>
-
-  <textarea id="hospitals"
-    placeholder="Enter hospitals separated by commas"></textarea>
+  </div>
 
 
-  <div class="section-title">🎓 Colleges</div>
+  <!-- SCORES -->
 
-  <textarea id="colleges"
-    placeholder="Enter colleges separated by commas"></textarea>
+  <div class="section">
+
+    <h2>🧠 AI Scores</h2>
+
+    <input id="connectivityScore"
+      placeholder="Connectivity Score">
+
+    <input id="infrastructureScore"
+      placeholder="Infrastructure Score">
+
+    <input id="demandScore"
+      placeholder="Demand Score">
+
+    <input id="developmentScore"
+      placeholder="Development Score">
+
+    <input id="livabilityScore"
+      placeholder="Livability Score">
+
+    <input id="scoreMethodology"
+      placeholder="Score Methodology">
+
+  </div>
 
 
-  <div class="section-title">🏦 Banks</div>
+  <!-- URBAN -->
 
-  <textarea id="banks"
-    placeholder="Enter banks separated by commas"></textarea>
+  <div class="section">
+
+    <h2>🏙 Urban Intelligence</h2>
+
+    <input id="growthCorridor"
+      placeholder="Growth Corridor">
+
+    <textarea id="urbanPosition"
+      placeholder="Urban Position"></textarea>
+
+    <textarea id="futureGrowth"
+      placeholder="Future Growth"></textarea>
+
+    <textarea id="aiSummary"
+      placeholder="AI Summary"></textarea>
+
+  </div>
 
 
-  <div class="section-title">🏗 Builder Projects</div>
+  <!-- SCHOOLS -->
 
-  <textarea id="builderProjects"
-    placeholder="Enter builder projects separated by commas"></textarea>
+  <div class="section">
+
+    <h2>🏫 Schools</h2>
+
+    <textarea id="schools"
+      placeholder="Format:
+School Name | Distance | Category"></textarea>
+
+  </div>
+
+
+  <!-- HOSPITALS -->
+
+  <div class="section">
+
+    <h2>🏥 Hospitals</h2>
+
+    <textarea id="hospitals"
+      placeholder="Format:
+Hospital Name | Distance | Category"></textarea>
+
+  </div>
+
+
+  <!-- BUILDERS -->
+
+  <div class="section">
+
+    <h2>🏗 Builder Projects</h2>
+
+    <textarea id="builders"
+      placeholder="Format:
+Project Name | Distance | Category"></textarea>
+
+  </div>
+
+
+  <!-- MARKET -->
+
+  <div class="section">
+
+    <h2>💰 Market Intelligence</h2>
+
+    <textarea id="marketRates"
+      placeholder="Format:
+Pocket | Price Range"></textarea>
+
+  </div>
 
 
   <button onclick="addArea()">
 
-    🚀 Add Intelligence Profile
+    🚀 Add Verified Intelligence Profile
 
   </button>
 
@@ -192,86 +251,90 @@
 </div>
 
 
-<h2>📍 Existing Intelligence Profiles</h2>
-
-<div class="areas" id="areas"></div>
-
-
 <script>
 
 const API =
 "https://property-backend-pfil.onrender.com";
 
 
-// LOAD AREAS
-async function loadAreas() {
+// PARSE INSTITUTIONS
+function parseInstitutions(text, source, confidence) {
 
-  try {
+  if (!text) return [];
 
-    const res = await fetch(API + "/api/area");
+  return text.split("\n").map(i => {
 
-    const data = await res.json();
+    const parts = i.split("|");
 
-    let html = "";
+    return {
 
-    data.forEach(area => {
+      name: parts[0]?.trim() || "",
 
-      html += `
+      distance: parts[1]?.trim() || "",
 
-        <div class="card">
+      category: parts[2]?.trim() || "",
 
-          <h3>${area.name}</h3>
+      source,
 
-          <div>📍 ${area.city}</div>
+      confidence
 
-          <br>
+    };
 
-          <div>
-            🏷 ${area.areaType || ""}
-          </div>
+  });
 
-          <div>
-            📈 ${area.growthTag || ""}
-          </div>
+}
 
-          <br>
 
-          <div>
-            💰 ₹${area.basePrice || ""}
-          </div>
+// PARSE MARKET
+function parseMarket(text) {
 
-          <br>
+  if (!text) return [];
 
-          <div>
-            🧠 Intelligence Profile Available
-          </div>
+  return text.split("\n").map(i => {
 
-          <button
-            class="delete-btn"
-            onclick="deleteArea('${area._id}')">
+    const parts = i.split("|");
 
-            🗑 Delete
+    return {
 
-          </button>
+      pocket: parts[0]?.trim() || "",
 
-        </div>
+      estimatedRange:
+        parts[1]?.trim() || "",
 
-      `;
-    });
+      source:
+        "EstateQuant Market Estimation",
 
-    document.getElementById("areas").innerHTML =
-      html;
+      confidence:
+        "Estimated",
 
-  } catch (err) {
+      updatedAt:
+        new Date().toISOString()
 
-    console.error(err);
+    };
 
-  }
+  });
+
 }
 
 
 // ADD AREA
 async function addArea() {
+
+  const source =
+    document.getElementById(
+      "connectivitySource"
+    ).value;
+
+  const confidence =
+    document.getElementById(
+      "connectivityConfidence"
+    ).value;
+
+  const methodology =
+    document.getElementById(
+      "scoreMethodology"
+    ).value;
+
 
   const data = {
 
@@ -291,78 +354,289 @@ async function addArea() {
       document.getElementById("growthTag").value,
 
 
-    connectivityScore:
-      Number(document.getElementById("connectivityScore").value),
+    // CONNECTIVITY
 
-    infrastructureScore:
-      Number(document.getElementById("infrastructureScore").value),
+    jaipurJunctionDistance: {
 
-    demandScore:
-      Number(document.getElementById("demandScore").value),
+      value:
+        document.getElementById(
+          "jaipurDistance"
+        ).value,
 
-    developmentScore:
-      Number(document.getElementById("developmentScore").value),
+      source,
 
-    livabilityScore:
-      Number(document.getElementById("livabilityScore").value),
+      confidence,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    nearestMetro: {
+
+      value:
+        document.getElementById(
+          "metro"
+        ).value,
+
+      source,
+
+      confidence,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    metroDistance: {
+
+      value:
+        document.getElementById(
+          "metroDistance"
+        ).value,
+
+      source,
+
+      confidence,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    nearestRailway: {
+
+      value:
+        document.getElementById(
+          "railway"
+        ).value,
+
+      source,
+
+      confidence,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    railwayDistance: {
+
+      value:
+        document.getElementById(
+          "railwayDistance"
+        ).value,
+
+      source,
+
+      confidence,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
 
 
-    jaipurJunctionDistance:
-      document.getElementById("jaipurJunctionDistance").value,
+    // SCORES
 
-    sindhiCampDistance:
-      document.getElementById("sindhiCampDistance").value,
+    connectivityScore: {
 
-    nearestMetro:
-      document.getElementById("nearestMetro").value,
+      value:
+        Number(document.getElementById(
+          "connectivityScore"
+        ).value),
 
-    metroDistance:
-      document.getElementById("metroDistance").value,
+      source,
 
-    nearestRailway:
-      document.getElementById("nearestRailway").value,
+      confidence,
 
-    railwayDistance:
-      document.getElementById("railwayDistance").value,
+      methodology,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    infrastructureScore: {
+
+      value:
+        Number(document.getElementById(
+          "infrastructureScore"
+        ).value),
+
+      source,
+
+      confidence,
+
+      methodology,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    demandScore: {
+
+      value:
+        Number(document.getElementById(
+          "demandScore"
+        ).value),
+
+      source,
+
+      confidence,
+
+      methodology,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    developmentScore: {
+
+      value:
+        Number(document.getElementById(
+          "developmentScore"
+        ).value),
+
+      source,
+
+      confidence,
+
+      methodology,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
+
+    livabilityScore: {
+
+      value:
+        Number(document.getElementById(
+          "livabilityScore"
+        ).value),
+
+      source,
+
+      confidence,
+
+      methodology,
+
+      updatedAt:
+        new Date().toISOString()
+
+    },
 
 
-    growthCorridor:
-      document.getElementById("growthCorridor").value,
+    // URBAN
 
-    urbanPosition:
-      document.getElementById("urbanPosition").value,
+    growthCorridor: {
 
-    futureGrowth:
-      document.getElementById("futureGrowth").value,
+      text:
+        document.getElementById(
+          "growthCorridor"
+        ).value,
 
-    aiSummary:
-      document.getElementById("aiSummary").value,
+      source,
 
+      confidence
+
+    },
+
+    urbanPosition: {
+
+      text:
+        document.getElementById(
+          "urbanPosition"
+        ).value,
+
+      source,
+
+      confidence
+
+    },
+
+    futureGrowth: {
+
+      text:
+        document.getElementById(
+          "futureGrowth"
+        ).value,
+
+      source,
+
+      confidence
+
+    },
+
+    aiSummary: {
+
+      text:
+        document.getElementById(
+          "aiSummary"
+        ).value,
+
+      source,
+
+      confidence
+
+    },
+
+
+    // ECOSYSTEM
 
     schools:
-      document.getElementById("schools")
-      .value
-      .split(","),
+      parseInstitutions(
+
+        document.getElementById(
+          "schools"
+        ).value,
+
+        source,
+
+        confidence
+
+      ),
 
     hospitals:
-      document.getElementById("hospitals")
-      .value
-      .split(","),
+      parseInstitutions(
 
-    colleges:
-      document.getElementById("colleges")
-      .value
-      .split(","),
+        document.getElementById(
+          "hospitals"
+        ).value,
 
-    banks:
-      document.getElementById("banks")
-      .value
-      .split(","),
+        source,
+
+        confidence
+
+      ),
 
     builderProjects:
-      document.getElementById("builderProjects")
-      .value
-      .split(",")
+      parseInstitutions(
+
+        document.getElementById(
+          "builders"
+        ).value,
+
+        source,
+
+        confidence
+
+      ),
+
+
+    // MARKET
+
+    marketRates:
+      parseMarket(
+
+        document.getElementById(
+          "marketRates"
+        ).value
+
+      )
 
   };
 
@@ -370,36 +644,39 @@ async function addArea() {
   try {
 
     const res = await fetch(
+
       API + "/api/add-area",
+
       {
 
         method: "POST",
 
         headers: {
 
-          "Content-Type": "application/json"
+          "Content-Type":
+            "application/json"
 
         },
 
-        body: JSON.stringify(data)
+        body:
+          JSON.stringify(data)
 
       }
+
     );
 
-    const result = await res.json();
+    const result =
+      await res.json();
 
     const msg =
       document.getElementById("msg");
-
 
     if (res.ok) {
 
       msg.style.color = "green";
 
       msg.innerText =
-        "✅ Intelligence Profile Added";
-
-      loadAreas();
+        "✅ Verified Intelligence Profile Added";
 
     } else {
 
@@ -414,51 +691,13 @@ async function addArea() {
 
     console.error(err);
 
-    const msg =
-      document.getElementById("msg");
-
-    msg.style.color = "red";
-
-    msg.innerText =
+    document.getElementById("msg")
+      .innerText =
       "❌ Server Error";
 
   }
+
 }
-
-
-// DELETE AREA
-async function deleteArea(id) {
-
-  const confirmDelete =
-    confirm("Delete this profile?");
-
-  if (!confirmDelete) return;
-
-  try {
-
-    await fetch(
-      API + "/api/delete-area/" + id,
-      {
-        method: "DELETE"
-      }
-    );
-
-    alert("Profile deleted");
-
-    loadAreas();
-
-  } catch (err) {
-
-    console.error(err);
-
-    alert("Delete failed");
-
-  }
-}
-
-
-// START
-loadAreas();
 
 </script>
 
